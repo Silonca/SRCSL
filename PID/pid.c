@@ -19,13 +19,13 @@ void PID_Init( PID *pid, uint8_t mode, float max_out, float max_iout, float p, f
 {
 	pid->max_iout = max_iout;
 	pid->max_out = max_out;
-	pid->pid_mode = mode;
+	pid->PID_mode = mode;
 	pid->deadband = 0;
 	pid->max_error = 0;	
 
-	pid->p = kp;
-	pid->i = ki;
-	pid->d = kd;
+	pid->p = p;
+	pid->i = i;
+	pid->d = d;
 	
 	PID_Clear(pid);
 }
@@ -85,7 +85,7 @@ float PID_Calc( PID *pid, float get, float set)
 		return 0;
 	
 
-	if( pid->pid_mode == PID_POSITION)
+	if( pid->PID_mode == PID_POSITION)
 	{
 		pid->pout = pid->p * pid->error[NOW];
         pid->iout += pid->i * pid->error[NOW];
@@ -94,7 +94,7 @@ float PID_Calc( PID *pid, float get, float set)
         pid->out = pid->pout + pid->iout + pid->dout;
         LimitMaxAbs(pid->out, pid->max_out);	
 	}
-	else if(pid->pid_mode == PID_DELTA)
+	else if(pid->PID_mode == PID_DELTA)
     {
         pid->pout = pid->p * (pid->error[NOW] - pid->error[LAST]);
         pid->iout = pid->i * pid->error[NOW];

@@ -15,7 +15,7 @@ typedef struct
 
 void Ramp_Updata();										//Please run this function in 1000Hz
 void Ramp_Set( Ramp *ramp);								//Run this to start the ramp
-float Ramp_Calc( Ramp *ramp, u32 time, u8 dir);			//Run this to get the ramp value( the unit of time is ms)
+float Ramp_Calc( Ramp *ramp, uint32_t time, uint8_t dir);			//Run this to get the ramp value( the unit of time is ms)
 
 
 #endif

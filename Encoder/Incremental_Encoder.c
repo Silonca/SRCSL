@@ -2,7 +2,7 @@
 
 void Incremental_Encoder_Init( Incremental_Encoder *encoder, uint32_t range)
 {
-    encoder->angle_abs = angle_abs;
+    //encoder->angle_abs = angle_abs;
     encoder->angle_sum = 0;
     encoder->d_value = 0;
     encoder->range = range;

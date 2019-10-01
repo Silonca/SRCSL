@@ -18,7 +18,7 @@ void Ramp_Set( Ramp *ramp)
 
 
 
-float Ramp_Calc( Ramp *ramp, u32 time, u8 dir)
+float Ramp_Calc( Ramp *ramp, uint32_t time, uint8_t dir)
 {
 	uint32_t diff;
 	

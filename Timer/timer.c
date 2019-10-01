@@ -1,21 +1,21 @@
-#ifndef TIMER_H_INCLUDED
-#define TIMER_H_INCLUDED
+#include "timer.h"
 
-#include <stdint.h>
+static volatile uint32_t timer_cnt = 0;
 
-typedef struct
+void Timer_Updata()
 {
-    uint32_t time;
-} Timer;
+    ++timer_cnt;
+}
 
 
-void Timer_Updata();                                                    //Please run this function in 1000Hz
-void Timer_Set( Timer *timer);                                          //Run this function to start a timer
-uint32_t Timer_Get( Timer *timer);                                      //Run this function to get the time from Timer_Set() till now
+void Timer_Set( Timer *timer)
+{
+    timer->time = timer_cnt;
+}
 
 
+uint32_t Timer_Get( Timer *timer)
+{
+    return timer_cnt - timer->time;
+}
 
-
-
-
-#endif

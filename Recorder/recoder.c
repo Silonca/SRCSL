@@ -1,6 +1,6 @@
 #include "recoder.h"
 
-void Recoder(void *data,uint32_t length, void newdata)
+void Recoder(uint8_t *data,uint32_t length, uint8_t newdata)
 {
     for(uint32_t i = 0; i < length - 1; ++i)
     {
