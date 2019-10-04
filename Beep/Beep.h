@@ -5,8 +5,7 @@
 
 
 
-enum BEEP_SRATES { BEEP_SWITCH_ON, BEEP_SWITCH_OFF};
-enum { SET, RESET};
+enum BEEP_STATES { BEEP_SWITCH_ON, BEEP_SWITCH_OFF};
 
 
 typedef struct 

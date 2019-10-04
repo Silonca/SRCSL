@@ -4,6 +4,8 @@
 
 int freq_C[7] = {523,587,659,698,784,880,988};		//C调中音频率
 
+enum { SET, RESET};
+
 
 //蜂鸣器初始化
 void Beep_Init( Beep beep, void ( *beep_on_func)(), void ( *beep_off_func)())
@@ -11,6 +13,7 @@ void Beep_Init( Beep beep, void ( *beep_on_func)(), void ( *beep_off_func)())
 	beep.beep_state = BEEP_SWITCH_OFF;
     beep.beep_on_func = beep_on_func;
     beep.beep_off_func = beep_off_func;
+	beep.beep_off_func();
 	Beep_Set( beep, 0, 0, 0);
 }
 
