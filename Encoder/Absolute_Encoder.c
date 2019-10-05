@@ -41,3 +41,7 @@ int32_t Absolute_Encoder_Get_Angle_Total( Absolute_Encoder *encoder)
     return encoder->rounds * encoder->range + encoder->angle_abs;
 }
 
+int32_t Absolute_Encoder_Get_D_Value( Absolute_Encoder *encoder)
+{
+    return encoder->d_value;
+}

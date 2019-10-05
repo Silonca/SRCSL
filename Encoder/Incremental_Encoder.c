@@ -32,3 +32,8 @@ int32_t Incremental_Encoder_Get_Angle_Total( Incremental_Encoder *encoder)
     return encoder->angle_sum;
 }
 
+int32_t Incremental_Encoder_Get_D_Value( Incremental_Encoder *encoder)
+{
+    return encoder->d_value;
+}
+

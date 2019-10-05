@@ -18,6 +18,7 @@ void Incremental_Encoder_Init( Incremental_Encoder *encoder, uint32_t range);
 void Incremental_Encoder_Updata( Incremental_Encoder *encoder, uint32_t delta);
 uint32_t Incremental_Encoder_Get_Angle_Abs( Incremental_Encoder *encoder);
 int32_t Incremental_Encoder_Get_Angle_Total( Incremental_Encoder *encoder);
+int32_t Incremental_Encoder_Get_D_Value( Incremental_Encoder *encoder);
 
 
 
