@@ -159,7 +159,7 @@ void Music_Analysis(Beep_Music *music)
 //蜂鸣器音乐服务函数
 void Beep_Music_Server( Beep *beep, Beep_Music *beep_music)
 {	
-	if(beep->server_state == RESET && /*sizeof(beep_music.music) != beep_music.progress)*/ beep_music.music[beep_music.progress] != '\0')
+	if(beep->server_state == RESET && /*sizeof(beep_music.music) != beep_music.progress)*/ beep_music->music[beep_music->progress] != '\0')
 	{
 		Music_Analysis(beep_music);						//解析曲谱
 		//Beep_Freq_Set(beep_music.current_tone_freq);		
