@@ -19,11 +19,23 @@ void Motor_Position_PID_Init( Motor *motor, uint8_t mode, float max_out, float m
     PID_Init( &(motor->position_pid), mode, max_out, max_iout, p, i, d);
 }
 
-
+void Motor_Rotation_Func_Init( Motor *motor, void ( *motor_rotation_func)(float pid_out))
+{
+    motor->motor_rotation_func = motor_rotation_func;
+}
 
 uint32_t Motor_Stall_Test(Motor *motor)
 {
-
+    if( motor->speed_pid.out > motor->speed_pid.max_out * STALL_PID_OUT_RATIO 
+        && motor->speed_pid.iout > motor->speed_pid.max_iout * STALL_PID_IOUT_RATIO)
+    {
+        return STALL;        
+    }
+    else
+    {
+        return NOT_STALL;
+    }
+        
 }
 
 
@@ -63,20 +75,78 @@ int32_t Motor_Position_Ctrl_Calc(Motor *motor, float position)
     return motor->speed_pid.out;
 }
 
-
-void Motor_Range_Set(Motor *motor, int32_t begin, int32_t end)
+int32_t Motor_Relative_Position_Ctrl_Calc(Motor *motor, float position)
 {
-    motor->range_begin = begin;
-    motor->range_end = end;
-    //motor->range_mode = SET;
+    Motor_Position_Ctrl_Calc( motor, position + motor->relative_zero);
 }
 
 
-void Motor_Range_Calibration(Motor *motor)
+
+void Motor_Range_Get(Motor *motor, int32_t step, void ( *motor_rotation_func)(float pid_out))
 {
+    if( motor->range_state == RANGE_END_OK)
+        return ;
+
+    float position_get;
+    if( motor->encoder_type == ABSOLUTE_ENCODER)
+    {
+        position_get = Absolute_Encoder_Get_Angle_Abs(&(motor->encoder.absolute));
+    }
+    else if( motor->encoder_type == INCREMENTAL_ENCODER)
+    {
+        position_get = Incremental_Encoder_Get_Angle_Abs(&(motor->encoder.incremental));
+    }
+
+    if( motor->range_state == RANGE_START)
+    {
+        if( Motor_Stall_Test( motor) == STALL )        
+        {
+            motor->range_begin = position_get;
+            motor->range_state = RANGE_BEGIN_OK;
+
+            PID_Clear( &(motor->position_pid));
+            PID_Clear( &(motor->speed_pid));
+            Motor_Position_Ctrl_Calc( motor, motor->range_begin + step);
+            motor_rotation_func( motor->position_pid.out);   
+            return ;
+        }
+
+        motor->range_begin = position_get - step;
+        Motor_Position_Ctrl_Calc( motor, motor->range_begin);
+        motor_rotation_func( motor->position_pid.out);   
+               
+    }
+    else if( motor->range_state == RANGE_BEGIN_OK ) 
+    {
+        if( Motor_Stall_Test( motor) == STALL )        
+        {
+            motor->range_end = position_get;
+            motor->range_state = RANGE_END_OK;
+
+            PID_Clear( &(motor->position_pid));
+            PID_Clear( &(motor->speed_pid));
+            Motor_Position_Ctrl_Calc( motor, motor->range_end - step);
+            motor_rotation_func( motor->position_pid.out); 
+            return ;
+        }
+
+        motor->range_end = position_get + step;
+        Motor_Position_Ctrl_Calc( motor, motor->range_end);
+        motor_rotation_func( motor->position_pid.out);   
+    }
 
 }
 
+void Motor_Set_Relative_Zero( Motor *motor, int32_t zero)
+{
+    motor->relative_zero = zero;
+}
+
+
+void Motor_Rotation( Motor *motor)
+{
+    motor->motor_rotation_func( motor->speed_pid.out);
+}
 
 
 //---------------------------------------------
