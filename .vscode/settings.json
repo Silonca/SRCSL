@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "math.h": "c",
+        "corecrt_math.h": "c",
+        "corecrt_math_defines.h": "c"
+    }
+}
