@@ -37,5 +37,6 @@ void Chassis_4w_Omni_Rotate_Ctrl( Chassis_4w *chassis, float vx, float vy, float
 
 void Chassis_4w_Arrive( Chassis_4w *chassis, float x, float y, float vxa_max, float vya_max, float vayaw_max, int32_t ( *isArrived)(float x,float y));
 
+void Chassis_4w_Mecanum_Off_Center_Ctrl( Chassis_4w *chassis, float vx, float vy, float vyaw, float width_rate, float length_rate);
 
 #endif      

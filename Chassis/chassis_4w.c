@@ -1,5 +1,6 @@
 #include "chassis_4w.h"
 
+#include <math.h>
 
 void Chassis_4w_Init( Chassis_4w *chassis, float w, float l, float vx_max, float vy_max, float vyaw_max)
 {
@@ -78,5 +79,25 @@ void Chassis_4w_Omni_Ctrl( Chassis_4w *chassis, float vx, float vy, float vyaw)
 }
 
 void Chassis_4w_Arrive( Chassis_4w *chassis, float x, float y, float vxa_max, float vya_max, float vayaw_max, int32_t ( *isArrived)(float x,float y));
+
+
+
+void Chassis_4w_Mecanum_Off_Center_Ctrl( Chassis_4w *chassis, float vx, float vy, float vyaw, float width_rate, float length_rate)
+{
+    float speed[4];
+
+    if( width_rate > 1 || width_rate < 0 || length_rate > 1 || length_rate < 0)
+        return ;
+
+    speed[ WHEEL_4W_LF] = vy + vx + vyaw * sqrtf( width_rate * length_rate / 0.5f / 0.5f);
+    speed[ WHEEL_4W_LR] = -(vy - vx - vyaw * sqrtf( width_rate * ( 1 - length_rate) / 0.5f / 0.5f));
+    speed[ WHEEL_4W_RF] = (vy - vx + vyaw * sqrtf( ( 1 - width_rate) * length_rate / 0.5f / 0.5f));
+    speed[ WHEEL_4W_RR] = -(vy + vx - vyaw * sqrtf( ( 1- width_rate) * ( 1 - length_rate) / 0.5f / 0.5f));
+
+    for( int a = 0; a < 4; ++a)
+    {
+        Motor_Speed_Ctrl_Calc( &( chassis->motors[a]), speed[a]);
+    }
+}
 
 
