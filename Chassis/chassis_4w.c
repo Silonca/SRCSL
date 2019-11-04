@@ -2,10 +2,8 @@
 
 #include <math.h>
 
-void Chassis_4w_Init( Chassis_4w *chassis, float w, float l, float vx_max, float vy_max, float vyaw_max)
+void Chassis_4w_Init( Chassis_4w *chassis, float vx_max, float vy_max, float vyaw_max)
 {
-    chassis->chassis_width = w;
-    chassis->chassis_length = l;
     chassis->vx_max = vx_max;
     chassis->vy_max = vy_max;
     chassis->vyaw_max = vyaw_max;
@@ -60,10 +58,10 @@ void Chassis_4w_Mecanum_Ctrl( Chassis_4w *chassis, float vx, float vy, float vya
 {
     float speed[4];
 
-    speed[ WHEEL_4W_LF] = vy + vx + vyaw * ( chassis->chassis_width + chassis->chassis_length);
-    speed[ WHEEL_4W_LR] = -(vy - vx - vyaw * ( chassis->chassis_width + chassis->chassis_length));
-    speed[ WHEEL_4W_RF] = (vy - vx + vyaw * ( chassis->chassis_width + chassis->chassis_length));
-    speed[ WHEEL_4W_RR] = -(vy + vx - vyaw * ( chassis->chassis_width + chassis->chassis_length));
+    speed[ WHEEL_4W_LF] = vy + vx + vyaw;
+    speed[ WHEEL_4W_LR] = -(vy - vx - vyaw);
+    speed[ WHEEL_4W_RF] = (vy - vx + vyaw);
+    speed[ WHEEL_4W_RR] = -(vy + vx - vyaw);
 
     for( int a = 0; a < 4; ++a)
     {
@@ -98,6 +96,33 @@ void Chassis_4w_Mecanum_Off_Center_Ctrl( Chassis_4w *chassis, float vx, float vy
     {
         Motor_Speed_Ctrl_Calc( &( chassis->motors[a]), speed[a]);
     }
+}
+
+void Chassis_4w_Mecanum_Headless_Ctrl( Chassis_4w *chassis, float vx, float vy, float vyaw, float angle)
+{
+    float speed[4];
+    float v_x,v_y;
+
+    v_x = vx * cos( angle) - vy * sin( -angle);
+    v_y = -vx * sin( angle) + vy * cos( -angle);
+
+    vx = v_x;
+    vy = v_y;
+
+    speed[ WHEEL_4W_LF] = vy + vx + vyaw;
+    speed[ WHEEL_4W_LR] = -(vy - vx - vyaw);
+    speed[ WHEEL_4W_RF] = (vy - vx + vyaw);
+    speed[ WHEEL_4W_RR] = -(vy + vx - vyaw);
+
+    for( int a = 0; a < 4; ++a)
+    {
+        Motor_Speed_Ctrl_Calc( &( chassis->motors[a]), speed[a]);
+    }    
+}
+
+void Chassis_4w_Omni_Headless_Ctrl( Chassis_4w *chassis, float vx, float vy, float vyaw, float angle)
+{
+    Chassis_4w_Mecanum_Headless_Ctrl( chassis, vx, vy, vyaw, angle);
 }
 
 
