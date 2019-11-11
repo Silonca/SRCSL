@@ -8,7 +8,8 @@
 
 typedef struct 
 {
-    Motor motors[2];
+    Motor motor;
+    Servo servo;
 
     float caster_angle;
     float speed; 
@@ -21,7 +22,8 @@ typedef struct
 
 
 void Chassis_car_Init( Chassis_car *chassis, float speed_forward_max, float speed_revering_max, float caster_angle_max);
-void Chassis_car_Motor_Init( Chassis_car *chassis, uint32_t encoder_type); 
+void Chassis_car_Motor_Init( Chassis_car *chassis, uint32_t encoder_type);
+void Chassis_car_Motor_Servo_Init( Chassis_car *chassis, void ( *servo_set_func)(uint32_t ), uint32_t origin_range_begin, uint32_t origin_range_end);
 void Chassis_car_Speed_PID_Init( Chassis_car *chassis, uint8_t mode, float max_out, float max_iout, float p, float i, float d);
 void Chassis_car_Position_PID_Init( Chassis_car *chassis, uint8_t mode, float max_out, float max_iout, float p, float i, float d);
 
