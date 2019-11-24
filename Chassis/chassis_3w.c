@@ -46,8 +46,68 @@ void Chassis_3w_Position_PID_Init( Chassis_3w *chassis, uint8_t mode, float max_
 
 
 
-void Chassis_3w_Omni_Ctrl( Chassis_3w *chassis, float vx, float vy, float vyaw);
-void Chassis_3w_Omni_Headless_Ctrl( Chassis_3w *chassis, float vx, float vy, float vyaw);
+void Chassis_3w_Omni_Ctrl( Chassis_3w *chassis, uint8_t heading_mode, float vx, float vy, float vyaw)
+{
+    float speed[3];
+
+    //untested !!!
+    if( heading_mode == WHEEL_3W_HEADING_MOTOR)
+    {
+        speed[ WHEEL_3W_ONE]    = vy + vyaw;
+        speed[ WHEEL_3W_TWO]    = -( 0.5f * vy - sqrt(3) / 2 * vx - vyaw);
+        speed[ WHEEL_3W_THREE]  = ( 0.5f * vy - sqrt(3) / 2 * vx + vyaw);        
+    }
+    else if( heading_mode == WHEEL_3W_HEADING_BETWEEN_MOTOR)
+    {
+        speed[ WHEEL_3W_ONE]    = vy + vyaw;
+        speed[ WHEEL_3W_TWO]    = -( 0.5f * vy - sqrt(3) / 2 * vx - vyaw);
+        speed[ WHEEL_3W_THREE]  = ( 0.5f * vy - sqrt(3) / 2 * vx + vyaw);    
+    }
+
+
+
+    for( int a = 0; a < 3; ++a)
+    {
+        Motor_Speed_Ctrl_Calc( &( chassis->motors[a]), speed[a]);
+    }
+}
+
+
+void Chassis_3w_Omni_Headless_Ctrl( Chassis_3w *chassis, uint8_t heading_mode, float vx, float vy, float vyaw, float angle)
+{
+    float speed[3];
+    float v_x,v_y;
+
+    v_x = vx * cos( angle) - vy * sin( -angle);
+    v_y = -vx * sin( angle) + vy * cos( -angle);
+
+    vx = v_x;
+    vy = v_y;
+
+    //untested !!!
+    if( heading_mode == WHEEL_3W_HEADING_MOTOR)
+    {
+        speed[ WHEEL_3W_ONE]    = vy + vyaw;
+        speed[ WHEEL_3W_TWO]    = -( 0.5f * vy - sqrt(3) / 2 * vx - vyaw);
+        speed[ WHEEL_3W_THREE]  = ( 0.5f * vy - sqrt(3) / 2 * vx + vyaw);        
+    }
+    else if( heading_mode == WHEEL_3W_HEADING_BETWEEN_MOTOR)
+    {
+        speed[ WHEEL_3W_ONE]    = vy + vyaw;
+        speed[ WHEEL_3W_TWO]    = -( 0.5f * vy - sqrt(3) / 2 * vx - vyaw);
+        speed[ WHEEL_3W_THREE]  = ( 0.5f * vy - sqrt(3) / 2 * vx + vyaw);    
+    }
+
+
+
+    for( int a = 0; a < 3; ++a)
+    {
+        Motor_Speed_Ctrl_Calc( &( chassis->motors[a]), speed[a]);
+    }
+}
+
+
+
 void Chassis_3w_Omni_Swing_Ctrl( Chassis_3w *chassis, float vx, float vy, float vyaw, float swing_angle);
 void Chassis_3w_Omni_Rotate_Ctrl( Chassis_3w *chassis, float vx, float vy, float vyaw);
 

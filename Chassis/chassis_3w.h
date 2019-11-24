@@ -25,8 +25,8 @@ void Chassis_3w_Position_PID_Init( Chassis_3w *chassis, uint8_t mode, float max_
 
 //Suppose the CW dirction is the motors' default dirtion
 //void Chassis_3w_Regular_Ctrl( Chassis_3w *chassis, float vx, float vyaw);
-void Chassis_3w_Omni_Ctrl( Chassis_3w *chassis, float vx, float vy, float vyaw);
-void Chassis_3w_Omni_Headless_Ctrl( Chassis_3w *chassis, float vx, float vy, float vyaw);
+void Chassis_3w_Omni_Ctrl( Chassis_3w *chassis, uint8_t heading_mode, float vx, float vy, float vyaw);
+void Chassis_3w_Omni_Headless_Ctrl( Chassis_3w *chassis, uint8_t heading_mode, float vx, float vy, float vyaw, float angle);
 void Chassis_3w_Omni_Swing_Ctrl( Chassis_3w *chassis, float vx, float vy, float vyaw, float swing_angle);
 void Chassis_3w_Omni_Rotate_Ctrl( Chassis_3w *chassis, float vx, float vy, float vyaw);
 
