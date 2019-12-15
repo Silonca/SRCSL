@@ -3,6 +3,8 @@
 
 #include <stdint.h>
 
+
+
 typedef struct
 {
     uint32_t time;
@@ -15,6 +17,12 @@ uint32_t Timer_Get( Timer *timer);                                      //Run th
 
 
 //----------------------------------------------------------
+
+
+#define ACT_REPEAT_COUNTLESS -1
+#define ACT_LIST_END -1
+#define ACT_LIST_FORMAT_ERROR -2
+
 
 typedef struct
 {
@@ -29,6 +37,11 @@ typedef struct
 
     Timer timer;
 
+    int32_t repeat_time;
+    int32_t repear_time_set;
+
+    uint8_t transition_flag;
+
     void ( *act_func)(uint8_t action_code);     //Must be a non-blocking function
 } Act_Orderly;
 
@@ -42,6 +55,14 @@ void Act_Restart( Act_Orderly *ao);                     //Restart
 
 void Act_Jump_Seq( Act_Orderly *ao, uint8_t seq);       //Jump to a specified frame
 void Act_Jump_Time( Act_Orderly *ao, uint32_t time);    //Jump to the frame after the given time
+
+uint8_t Act_Get_progress(Act_Orderly *ao);
+uint8_t Act_Get_Length(Act_Orderly *ao);
+
+void Act_Set_Repeat( Act_Orderly *ao, int32_t times);
+int32_t Act_Get_Repeat_Time( Act_Orderly *ao);
+
+void Act_Set_Transition( Act_Orderly *ao, uint8_t flag);
 
 void Act_Server( Act_Orderly *ao);                      //Server Function, must run periodically
 

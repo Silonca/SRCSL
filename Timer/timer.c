@@ -102,7 +102,7 @@ uint8_t Act_List_Analyse( Act_Orderly *ao)
     if( ao->processing_action == -1 || ao->processing_action == 0)
     {
         Act_Stop( ao);
-        return -1;
+        return ACT_LIST_FORMAT_ERROR;
     }
 
     //find the "," and next pending subscript index
@@ -111,7 +111,7 @@ uint8_t Act_List_Analyse( Act_Orderly *ao)
         if( ao->list[ ao->list_process] != '\0')
         {
             Act_Stop( ao);
-            return -1;
+            return ACT_LIST_END;
         }
     }
 
@@ -121,7 +121,7 @@ uint8_t Act_List_Analyse( Act_Orderly *ao)
     if( ao->processing_time == -1 || ao->processing_time == 0)
     {
         Act_Stop( ao);
-        return -1;
+        return ACT_LIST_FORMAT_ERROR;
     }
 
     //find the ";" and next pending subscript index
@@ -130,7 +130,7 @@ uint8_t Act_List_Analyse( Act_Orderly *ao)
         if( ao->list[ ao->list_process] != '\0')
         {
             Act_Stop( ao);
-            return -1;            
+            return ACT_LIST_END;            
         }
 
     }
@@ -149,9 +149,20 @@ void Act_Server( Act_Orderly *ao)
 
         if( Timer_Get( &( ao->timer)) % ao->processing_time == 0)
         {
-            if( Act_List_Analyse( ao) == -1)
+            /*if( Act_List_Analyse( ao) == -1)
             {
                 //some code to handle the malformed input
+            }*/
+            switch( Act_List_Analyse( ao))
+            {
+                case ACT_LIST_END:
+                    if( ao->repeat_time++ < ao->repear_time_set)
+                        Act_Restart( ao);
+                    break;
+                case ACT_LIST_FORMAT_ERROR:
+                    break;
+                default:
+                    break;
             }
             ao->act_func( ao->processing_action);
         }
@@ -162,3 +173,39 @@ void Act_Server( Act_Orderly *ao)
     }
     
 }
+
+
+
+uint8_t Act_Get_progress(Act_Orderly *ao)
+{
+    return ao->processing_index;
+}
+
+uint8_t Act_Get_Length(Act_Orderly *ao)
+{
+    uint8_t cnt = 0;
+    for( uint32_t a = 0; ao->list[a] != '\0'; ++a)
+    {
+        if( ao->list[a] == ';')
+            ++cnt;
+    }
+
+    return cnt;
+}
+
+void Act_Set_Repeat( Act_Orderly *ao, int32_t times)
+{
+    ao->repear_time_set = times;
+}
+
+int32_t Act_Get_Repeat_Time( Act_Orderly *ao)
+{
+    return ao->repeat_time;
+}
+
+void Act_Set_Transition( Act_Orderly *ao, uint8_t flag)
+{
+    ao->transition_flag = flag;
+}
+
+
