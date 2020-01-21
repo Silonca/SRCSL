@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 
-#include "../Motor/motor.h"
+#include "motor.h"
 
 enum CHASSIS_4W { WHEEL_4W_LF, WHEEL_4W_LR, WHEEL_4W_RF, WHEEL_4W_RR};
 enum CHASSIS_3W { WHEEL_3W_ONE, WHEEL_3W_TWO, WHEEL_3W_THREE};

@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 
-#include "../Motor/motor.h"
+#include "motor.h"
 
 enum GIMBAL_AXIS { GIMBAL_AXIS_YAW, GIMBAL_AXIS_PITCH, GIMBAL_AXIS_ROLL};
 
