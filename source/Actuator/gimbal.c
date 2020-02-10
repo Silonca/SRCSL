@@ -2,7 +2,7 @@
 
 
 
-void Gimbal_Init( Gimbal *gimbal, float yaw_limit, float pitch_limit, float roll_limit)
+void gimbal_init( Gimbal *gimbal, float yaw_limit, float pitch_limit, float roll_limit)
 {
     for( int a = 0; a < 3; ++a)
     {
@@ -17,72 +17,72 @@ void Gimbal_Init( Gimbal *gimbal, float yaw_limit, float pitch_limit, float roll
 
 
 
-void Gimbal_Set_Yaw_Zero( Gimbal *gimbal, float angle)
+void gimbal_set_yaw_zero( Gimbal *gimbal, float angle)
 {
-    Motor_Set_Relative_Zero( &(gimbal->motors[ GIMBAL_AXIS_YAW]), angle);
+    motor_set_relative_zero( &(gimbal->motors[ GIMBAL_AXIS_YAW]), angle);
 }
 
-void Gimbal_Set_Pitch_Zero( Gimbal *gimbal, float angle)
+void gimbal_set_pitch_zero( Gimbal *gimbal, float angle)
 {
-    Motor_Set_Relative_Zero( &(gimbal->motors[ GIMBAL_AXIS_PITCH]), angle);
+    motor_set_relative_zero( &(gimbal->motors[ GIMBAL_AXIS_PITCH]), angle);
 }
 
-void Gimbal_Set_Roll_Zero( Gimbal *gimbal, float angle)
+void gimbal_set_roll_zero( Gimbal *gimbal, float angle)
 {
-    Motor_Set_Relative_Zero( &(gimbal->motors[ GIMBAL_AXIS_ROLL]), angle);
-}
-
-
-
-
-
-void Gimbal_Yaw_Speed_PID_Init( Gimbal *gimbal, uint8_t mode, float max_out, float max_iout, float p, float i, float d)
-{
-    Motor_Speed_PID_Init( &( gimbal->motors[ GIMBAL_AXIS_YAW]), mode, max_out, max_iout, p, i, d);
-}
-
-void Gimbal_Yaw_Position_PID_Init( Gimbal *gimbal, uint8_t mode, float max_out, float max_iout, float p, float i, float d)
-{
-    Motor_Position_PID_Init( &( gimbal->motors[ GIMBAL_AXIS_YAW]), mode, max_out, max_iout, p, i, d);
-}
-
-void Gimbal_Pitch_Speed_PID_Init( Gimbal *gimbal, uint8_t mode, float max_out, float max_iout, float p, float i, float d)
-{
-    Motor_Speed_PID_Init( &( gimbal->motors[ GIMBAL_AXIS_PITCH]), mode, max_out, max_iout, p, i, d);
-}
-void Gimbal_Pitch_Position_PID_Init( Gimbal *gimbal, uint8_t mode, float max_out, float max_iout, float p, float i, float d)
-{
-    Motor_Position_PID_Init( &( gimbal->motors[ GIMBAL_AXIS_PITCH]), mode, max_out, max_iout, p, i, d);
-}
-
-void Gimbal_Roll_Speed_PID_Init( Gimbal *gimbal, uint8_t mode, float max_out, float max_iout, float p, float i, float d)
-{
-    Motor_Speed_PID_Init( &( gimbal->motors[ GIMBAL_AXIS_ROLL]), mode, max_out, max_iout, p, i, d);
-}
-
-void Gimbal_Roll_Position_PID_Init( Gimbal *gimbal, uint8_t mode, float max_out, float max_iout, float p, float i, float d)
-{
-    Motor_Position_PID_Init( &( gimbal->motors[ GIMBAL_AXIS_ROLL]), mode, max_out, max_iout, p, i, d);
+    motor_set_relative_zero( &(gimbal->motors[ GIMBAL_AXIS_ROLL]), angle);
 }
 
 
 
 
-void Gimbal_Ctrl( Gimbal *gimbal, float angle_yaw, float angle_pitch, float angle_roll)
+
+void gimbal_yaw_speed_pid_init( Gimbal *gimbal, uint8_t mode, float max_out, float max_iout, float p, float i, float d)
 {
-    Gimbal_Yaw_Ctrl( gimbal, angle_yaw);
-    Gimbal_Pitch_Ctrl( gimbal, angle_pitch);
-    Gimbal_Roll_Ctrl( gimbal, angle_roll);
+    motor_speed_pid_init( &( gimbal->motors[ GIMBAL_AXIS_YAW]), mode, max_out, max_iout, p, i, d);
 }
-void Gimbal_Yaw_Ctrl( Gimbal *gimbal, float angle)
+
+void gimbal_yaw_position_pid_init( Gimbal *gimbal, uint8_t mode, float max_out, float max_iout, float p, float i, float d)
 {
-    Motor_Position_Ctrl_Calc( &( gimbal->motors[ GIMBAL_AXIS_YAW]), angle);
+    motor_position_pid_init( &( gimbal->motors[ GIMBAL_AXIS_YAW]), mode, max_out, max_iout, p, i, d);
 }
-void Gimbal_Pitch_Ctrl( Gimbal *gimbal, float angle)
+
+void gimbal_pitch_speed_pid_init( Gimbal *gimbal, uint8_t mode, float max_out, float max_iout, float p, float i, float d)
 {
-    Motor_Position_Ctrl_Calc( &( gimbal->motors[ GIMBAL_AXIS_PITCH]), angle);
+    motor_speed_pid_init( &( gimbal->motors[ GIMBAL_AXIS_PITCH]), mode, max_out, max_iout, p, i, d);
 }
-void Gimbal_Roll_Ctrl( Gimbal *gimbal, float angle)
+void gimbal_pitch_position_pid_init( Gimbal *gimbal, uint8_t mode, float max_out, float max_iout, float p, float i, float d)
 {
-    Motor_Position_Ctrl_Calc( &( gimbal->motors[ GIMBAL_AXIS_ROLL]), angle);
+    motor_position_pid_init( &( gimbal->motors[ GIMBAL_AXIS_PITCH]), mode, max_out, max_iout, p, i, d);
+}
+
+void gimbal_roll_speed_pid_init( Gimbal *gimbal, uint8_t mode, float max_out, float max_iout, float p, float i, float d)
+{
+    motor_speed_pid_init( &( gimbal->motors[ GIMBAL_AXIS_ROLL]), mode, max_out, max_iout, p, i, d);
+}
+
+void gimbal_roll_position_pid_init( Gimbal *gimbal, uint8_t mode, float max_out, float max_iout, float p, float i, float d)
+{
+    motor_position_pid_init( &( gimbal->motors[ GIMBAL_AXIS_ROLL]), mode, max_out, max_iout, p, i, d);
+}
+
+
+
+
+void gimbal_ctrl( Gimbal *gimbal, float angle_yaw, float angle_pitch, float angle_roll)
+{
+    gimbal_yaw_ctrl( gimbal, angle_yaw);
+    gimbal_pitch_ctrl( gimbal, angle_pitch);
+    gimbal_roll_ctrl( gimbal, angle_roll);
+}
+void gimbal_yaw_ctrl( Gimbal *gimbal, float angle)
+{
+    motor_position_ctrl_calc( &( gimbal->motors[ GIMBAL_AXIS_YAW]), angle);
+}
+void gimbal_pitch_ctrl( Gimbal *gimbal, float angle)
+{
+    motor_position_ctrl_calc( &( gimbal->motors[ GIMBAL_AXIS_PITCH]), angle);
+}
+void gimbal_roll_ctrl( Gimbal *gimbal, float angle)
+{
+    motor_position_ctrl_calc( &( gimbal->motors[ GIMBAL_AXIS_ROLL]), angle);
 }

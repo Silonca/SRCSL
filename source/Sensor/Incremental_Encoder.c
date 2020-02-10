@@ -1,6 +1,6 @@
 #include "Incremental_Encoder.h"
 
-void Incremental_Encoder_Init( Incremental_Encoder *encoder, uint32_t range)
+void incremental_encoder_init( Incremental_Encoder *encoder, uint32_t range)
 {
     //encoder->angle_abs = angle_abs;
     encoder->angle_sum = 0;
@@ -12,7 +12,7 @@ void Incremental_Encoder_Init( Incremental_Encoder *encoder, uint32_t range)
 
 
 
-void Incremental_Encoder_Updata( Incremental_Encoder *encoder, uint32_t delta)
+void incremental_encoder_updata( Incremental_Encoder *encoder, uint32_t delta)
 {
     encoder->d_value = delta;
     encoder->angle_sum += encoder->d_value;
@@ -22,17 +22,17 @@ void Incremental_Encoder_Updata( Incremental_Encoder *encoder, uint32_t delta)
 }
 
 
-uint32_t Incremental_Encoder_Get_Angle_Abs( Incremental_Encoder *encoder)
+uint32_t incremental_encoder_get_angle_abs( Incremental_Encoder *encoder)
 {
     return encoder->angle;
 }
 
-int32_t Incremental_Encoder_Get_Angle_Total( Incremental_Encoder *encoder)
+int32_t incremental_encoder_get_angle_total( Incremental_Encoder *encoder)
 {
     return encoder->angle_sum;
 }
 
-int32_t Incremental_Encoder_Get_D_Value( Incremental_Encoder *encoder)
+int32_t incremental_encoder_get_d_value( Incremental_Encoder *encoder)
 {
     return encoder->d_value;
 }

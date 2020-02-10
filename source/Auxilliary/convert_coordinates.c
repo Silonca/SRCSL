@@ -10,7 +10,7 @@
 
 
 
-Cartesian_Coordinates Convert_P2C( Polar_Coordinates polar)
+Cartesian_Coordinates convert_P2C( Polar_Coordinates polar)
 {
     Cartesian_Coordinates temp;
 
@@ -21,7 +21,7 @@ Cartesian_Coordinates Convert_P2C( Polar_Coordinates polar)
 }
 
 
-Polar_Coordinates Convert_C2P( Cartesian_Coordinates cartesian)
+Polar_Coordinates convert_C2P( Cartesian_Coordinates cartesian)
 {
     Polar_Coordinates temp;
 
@@ -32,7 +32,7 @@ Polar_Coordinates Convert_C2P( Cartesian_Coordinates cartesian)
 }
 
 
-Polar_Coordinates Vector_P2P( Polar_Coordinates polar_begin, Polar_Coordinates polar_end)
+Polar_Coordinates vector_P2P( Polar_Coordinates polar_begin, Polar_Coordinates polar_end)
 {
     Polar_Coordinates temp;
 
@@ -46,7 +46,7 @@ Polar_Coordinates Vector_P2P( Polar_Coordinates polar_begin, Polar_Coordinates p
 
 
 
-Cartesian_Coordinates Vector_C2C( Cartesian_Coordinates cartesian_begin, Cartesian_Coordinates cartesian_end)
+Cartesian_Coordinates vector_C2C( Cartesian_Coordinates cartesian_begin, Cartesian_Coordinates cartesian_end)
 {
     Cartesian_Coordinates temp;
 

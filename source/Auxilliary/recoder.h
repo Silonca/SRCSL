@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 
-void Recoder(void *data,uint32_t length, uint8_t newdata);
+void recoder(void *data,uint32_t length, uint8_t newdata);
 
 
 
@@ -15,7 +15,7 @@ struct RECODER_TYPE\
 
 
 #define RECODER_FUNC(TYPE,LENGTH,NEWDATA)\
-Recoder_TYPE Recoder_TYPE_Func( RECODER(TYPE,LENGTH) *DATA, TYPE NEWDATA)\
+Recoder_TYPE recoder_TYPE_func( RECODER(TYPE,LENGTH) *DATA, TYPE NEWDATA)\
 {\
     for( uint32_t a = 0; a < LENGTH - 1; ++a)\
     {\

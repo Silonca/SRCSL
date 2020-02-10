@@ -15,11 +15,11 @@
     }
 
 
-void PID_Init( PID *pid, uint8_t mode, float max_out, float max_iout, float p, float i, float d)
+void pid_init( PID *pid, uint8_t mode, float max_out, float max_iout, float p, float i, float d)
 {
 	pid->max_iout = max_iout;
 	pid->max_out = max_out;
-	pid->PID_mode = mode;
+	pid->pid_mode = mode;
 	pid->deadband = 0;
 	pid->max_error = 0;	
 
@@ -27,22 +27,22 @@ void PID_Init( PID *pid, uint8_t mode, float max_out, float max_iout, float p, f
 	pid->i = i;
 	pid->d = d;
 	
-	PID_Clear(pid);
+	pid_clear(pid);
 }
 
 
 
 
-void PID_Reset( PID *pid, float kp, float ki, float kd)
+void pid_reset( PID *pid, float kp, float ki, float kd)
 {
 	pid->p = kp;
 	pid->i = ki;
 	pid->d = kd;
 	
-	PID_Clear(pid);	
+	pid_clear(pid);	
 }
 
-void PID_Clear( PID *pid)
+void pid_clear( PID *pid)
 {
 	pid->pout = 0;
 	pid->iout = 0;
@@ -59,7 +59,7 @@ void PID_Clear( PID *pid)
 
 
 
-float PID_Calc( PID *pid, float get, float set)
+float pid_calc( PID *pid, float get, float set)
 {
 	enum
 	{
@@ -85,7 +85,7 @@ float PID_Calc( PID *pid, float get, float set)
 		return 0;
 	
 
-	if( pid->PID_mode == PID_POSITION)
+	if( pid->pid_mode == PID_POSITION)
 	{
 		pid->pout = pid->p * pid->error[NOW];
         pid->iout += pid->i * pid->error[NOW];
@@ -94,7 +94,7 @@ float PID_Calc( PID *pid, float get, float set)
         pid->out = pid->pout + pid->iout + pid->dout;
         LimitMaxAbs(pid->out, pid->max_out);	
 	}
-	else if(pid->PID_mode == PID_DELTA)
+	else if(pid->pid_mode == PID_DELTA)
     {
         pid->pout = pid->p * (pid->error[NOW] - pid->error[LAST]);
         pid->iout = pid->i * pid->error[NOW];
@@ -112,7 +112,7 @@ float PID_Calc( PID *pid, float get, float set)
 
 
 
-void PID_Set_MaxError( PID *pid, float max_error)             
+void pid_set_maxerror( PID *pid, float max_error)             
 {
 	if( pid == NULL)
 		return ;
@@ -120,7 +120,7 @@ void PID_Set_MaxError( PID *pid, float max_error)
 	pid->max_error = max_error;
 }
 
-void PID_Set_DeadBand( PID *pid, float deadband)
+void pid_set_deadband( PID *pid, float deadband)
 {
 	if( pid == NULL)
 		return ;

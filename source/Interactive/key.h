@@ -16,11 +16,11 @@ typedef struct
 } Key;
 
 
-void Key_Init( Key *key);
-void Key_Update( Key *key, uint8_t key_state);
-void Key_Update_WithQuiver( Key *key, uint8_t key_state);
-uint8_t Key_Get_State( Key *key);
-uint8_t Key_Get_Action( Key *key);
+void key_init( Key *key);
+void key_update( Key *key, uint8_t key_state);
+void key_update_withquiver( Key *key, uint8_t key_state);
+uint8_t key_get_state( Key *key);
+uint8_t key_get_action( Key *key);
 
 
 

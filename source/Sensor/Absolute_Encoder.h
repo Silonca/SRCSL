@@ -14,9 +14,9 @@ typedef struct
 } Absolute_Encoder;
 
 
-void Absolute_Encoder_Init( Absolute_Encoder *encoder, uint32_t range, uint32_t angle_abs);
-void Absolute_Encoder_Updata( Absolute_Encoder *encoder, uint32_t angle_abs);
-uint32_t Absolute_Encoder_Get_Angle_Abs( Absolute_Encoder *encoder);
-int32_t Absolute_Encoder_Get_Angle_Total( Absolute_Encoder *encoder);
-int32_t Absolute_Encoder_Get_D_Value( Absolute_Encoder *encoder);
+void absolute_encoder_init( Absolute_Encoder *encoder, uint32_t range, uint32_t angle_abs);
+void absolute_encoder_updata( Absolute_Encoder *encoder, uint32_t angle_abs);
+uint32_t absolute_encoder_get_angle_abs( Absolute_Encoder *encoder);
+int32_t absolute_encoder_get_angle_total( Absolute_Encoder *encoder);
+int32_t absolute_encoder_get_d_value( Absolute_Encoder *encoder);
 #endif

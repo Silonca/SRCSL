@@ -14,7 +14,7 @@ enum PID_MODE
 
 typedef struct
 {
-    uint8_t PID_mode;
+    uint8_t pid_mode;
 
 	float p;
     float i;
@@ -40,13 +40,13 @@ typedef struct
 
 
 
-void  PID_Init( PID *pid, uint8_t mode, float max_out, float max_iout, float p, float i, float d);	
-void  PID_Clear( PID *pid);				
-float PID_Calc( PID *pid, float get, float set);																					
-void  PID_Reset( PID *pid, float kp, float ki, float kd);																			
+void  pid_init( PID *pid, uint8_t mode, float max_out, float max_iout, float p, float i, float d);	
+void  pid_clear( PID *pid);				
+float pid_calc( PID *pid, float get, float set);																					
+void  pid_reset( PID *pid, float kp, float ki, float kd);																			
 
-void PID_Set_MaxError( PID *pid, float max_error);                  
-void PID_Set_DeadBand( PID *pid, float deadband);
+void pid_set_maxerror( PID *pid, float max_error);                  
+void pid_set_deadband( PID *pid, float deadband);
 
 
 

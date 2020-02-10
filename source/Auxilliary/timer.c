@@ -6,19 +6,19 @@ static volatile uint32_t timer_cnt = 0;
 
 enum { SET, RESET};
 
-void Timer_Updata()
+void timer_updata()
 {
     ++timer_cnt;
 }
 
 
-void Timer_Set( Timer *timer)
+void timer_set( Timer *timer)
 {
     timer->time = timer_cnt;
 }
 
 
-uint32_t Timer_Get( Timer *timer)
+uint32_t timer_get( Timer *timer)
 {
     return timer_cnt - timer->time;
 }
@@ -27,7 +27,7 @@ uint32_t Timer_Get( Timer *timer)
 
 //------------------------------------------------------------
 
-void Act_Init( Act_Orderly *ao, char *list, void ( *act_func)( uint8_t action_code))
+void act_init( Act_Orderly *ao, char *list, void ( *act_func)( uint8_t action_code))
 {
     ao->list = list;
 
@@ -41,27 +41,27 @@ void Act_Init( Act_Orderly *ao, char *list, void ( *act_func)( uint8_t action_co
 }
 
 
-void Act_Start( Act_Orderly *ao)
+void act_start( Act_Orderly *ao)
 {
     ao->pause_flag = RESET;
     ao->timer_start_flag = SET;
 }
 
 
-void Act_Pause( Act_Orderly *ao)
+void act_pause( Act_Orderly *ao)
 {
     ao->pause_flag = SET;
 }
 
 
-void Act_Stop( Act_Orderly *ao)
+void act_stop( Act_Orderly *ao)
 {
     ao->pause_flag = SET;
     ao->processing_index = 0;
 }
 
 
-void Act_Restart( Act_Orderly *ao)
+void act_restart( Act_Orderly *ao)
 {
     ao->processing_index = 0;
     ao->pause_flag = RESET;
@@ -69,39 +69,38 @@ void Act_Restart( Act_Orderly *ao)
 }
 
 
-void Act_Jump_Seq( Act_Orderly *ao, uint8_t seq)
+void act_jump_seq( Act_Orderly *ao, uint8_t seq)
 {
-    Act_Restart( ao);
+    act_restart( ao);
     for( uint8_t a = 0; a < seq; ++a)
     {
-        Act_List_Analyse( ao);
+        act_list_analyse( ao);
         ++ao->processing_index;
     }
 }
 
 
-void Act_Jump_Time( Act_Orderly *ao, uint32_t time)
+void act_jump_time( Act_Orderly *ao, uint32_t time)
 {
     uint32_t time_sum = 0;
-    Act_Restart( ao);
+    act_restart( ao);
     do
     {
-        
-        Act_List_Analyse( ao);
+        act_list_analyse( ao);
         ++ao->processing_index;
         time_sum += ao->processing_time;
     }
     while( time_sum < time);
 }
 
-uint8_t Act_List_Analyse( Act_Orderly *ao)
+uint8_t act_list_analyse( Act_Orderly *ao)
 {
     //get the next action from the string
     ao->processing_action = atoi( ao->list + ao->list_process);
     //handling malformed
     if( ao->processing_action == -1 || ao->processing_action == 0)
     {
-        Act_Stop( ao);
+        act_stop( ao);
         return ACT_LIST_FORMAT_ERROR;
     }
 
@@ -110,7 +109,7 @@ uint8_t Act_List_Analyse( Act_Orderly *ao)
     {
         if( ao->list[ ao->list_process] != '\0')
         {
-            Act_Stop( ao);
+            act_stop( ao);
             return ACT_LIST_END;
         }
     }
@@ -120,7 +119,7 @@ uint8_t Act_List_Analyse( Act_Orderly *ao)
     //handling malformed input
     if( ao->processing_time == -1 || ao->processing_time == 0)
     {
-        Act_Stop( ao);
+        act_stop( ao);
         return ACT_LIST_FORMAT_ERROR;
     }
 
@@ -129,7 +128,7 @@ uint8_t Act_List_Analyse( Act_Orderly *ao)
     {
         if( ao->list[ ao->list_process] != '\0')
         {
-            Act_Stop( ao);
+            act_stop( ao);
             return ACT_LIST_END;            
         }
 
@@ -137,27 +136,27 @@ uint8_t Act_List_Analyse( Act_Orderly *ao)
     return 0;
 }
 
-void Act_Server( Act_Orderly *ao)
+void act_server( Act_Orderly *ao)
 {
     if( ao->pause_flag == RESET)
     {
         if( ao->timer_start_flag == SET)
         {
-            Timer_Set( &( ao->timer));
+            timer_set( &( ao->timer));
             ao->timer_start_flag = RESET;
         }
 
-        if( Timer_Get( &( ao->timer)) % ao->processing_time == 0)
+        if( timer_get( &( ao->timer)) % ao->processing_time == 0)
         {
             /*if( Act_List_Analyse( ao) == -1)
             {
                 //some code to handle the malformed input
             }*/
-            switch( Act_List_Analyse( ao))
+            switch( act_list_analyse( ao))
             {
                 case ACT_LIST_END:
                     if( ao->repeat_time++ < ao->repear_time_set)
-                        Act_Restart( ao);
+                        act_restart( ao);
                     break;
                 case ACT_LIST_FORMAT_ERROR:
                     break;
@@ -176,12 +175,12 @@ void Act_Server( Act_Orderly *ao)
 
 
 
-uint8_t Act_Get_progress(Act_Orderly *ao)
+uint8_t act_get_progress(Act_Orderly *ao)
 {
     return ao->processing_index;
 }
 
-uint8_t Act_Get_Length(Act_Orderly *ao)
+uint8_t act_get_length(Act_Orderly *ao)
 {
     uint8_t cnt = 0;
     for( uint32_t a = 0; ao->list[a] != '\0'; ++a)
@@ -193,17 +192,17 @@ uint8_t Act_Get_Length(Act_Orderly *ao)
     return cnt;
 }
 
-void Act_Set_Repeat( Act_Orderly *ao, int32_t times)
+void act_set_repeat( Act_Orderly *ao, int32_t times)
 {
     ao->repear_time_set = times;
 }
 
-int32_t Act_Get_Repeat_Time( Act_Orderly *ao)
+int32_t act_get_repeat_time( Act_Orderly *ao)
 {
     return ao->repeat_time;
 }
 
-void Act_Set_Transition( Act_Orderly *ao, uint8_t flag)
+void act_set_transition( Act_Orderly *ao, uint8_t flag)
 {
     ao->transition_flag = flag;
 }

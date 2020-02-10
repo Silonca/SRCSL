@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <string.h>
 
-void Log_Init( Log *log)
+void log_init( Log *log)
 {
     for( uint32_t a = 0; a < MSG_SUM_MAX; ++a)
     {
@@ -17,7 +17,7 @@ void Log_Init( Log *log)
 
 
 
-void Log_Add( Log *log, int8_t *fmt, ...)
+void log_add( Log *log, int8_t *fmt, ...)
 {
     va_list list;
     va_start( list, fmt);
@@ -33,7 +33,7 @@ void Log_Add( Log *log, int8_t *fmt, ...)
 }
 
 
-int8_t Log_Find( Log *log, const int8_t *msg)
+int8_t log_find( Log *log, const int8_t *msg)
 {
     for( uint8_t a = 0; a < MSG_SUM_MAX; ++a)
     {
@@ -47,7 +47,7 @@ int8_t Log_Find( Log *log, const int8_t *msg)
 }
 
 
-void Log_Out( Log *log, void ( *output_func)(int8_t *msg))
+void log_out( Log *log, void ( *output_func)(int8_t *msg))
 {
     for( int8_t a = log->index + 1; a < MSG_SUM_MAX; ++a)
     {

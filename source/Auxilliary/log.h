@@ -14,10 +14,10 @@ typedef struct
 } Log;
 
 
-void Log_Init( Log *log);
-void Log_Add( Log *log, int8_t *fmt, ...);
-int8_t Log_Find( Log *log, const int8_t *msg);
-void Log_Out( Log *log, void ( *output_func)(int8_t *msg));
+void log_init( Log *log);
+void log_add( Log *log, int8_t *fmt, ...);
+int8_t log_find( Log *log, const int8_t *msg);
+void log_out( Log *log, void ( *output_func)(int8_t *msg));
 
 
 #endif

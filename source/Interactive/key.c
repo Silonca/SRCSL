@@ -2,7 +2,7 @@
 
 
 
-void Key_Init( Key *key)
+void key_init( Key *key)
 {
     key->state = KEY_STATE_UNPRESS;
     key->last_state = KEY_STATE_UNPRESS;
@@ -11,7 +11,7 @@ void Key_Init( Key *key)
 
 
 //key_state is the state that has clear up the quiver
-void Key_Update( Key *key, uint8_t key_state)
+void key_update( Key *key, uint8_t key_state)
 {
     key->last_state = key->state;
     key->state = key_state;
@@ -31,7 +31,7 @@ void Key_Update( Key *key, uint8_t key_state)
 }
 
 //this function deal with the origin key state
-void Key_Update_WithQuiver( Key *key, uint8_t key_state)
+void key_update_withquiver( Key *key, uint8_t key_state)
 {
     if( key->last_state == KEY_ACTION_UNPRESS && key_state == KEY_STATE_PRESS)
     {
@@ -62,13 +62,13 @@ void Key_Update_WithQuiver( Key *key, uint8_t key_state)
 }
 
 
-uint8_t Key_Get_State( Key *key)
+uint8_t key_get_state( Key *key)
 {
     return key->state;
 }
 
 
-uint8_t Key_Get_Action( Key *key)
+uint8_t key_get_action( Key *key)
 {
     return key->action;
 }

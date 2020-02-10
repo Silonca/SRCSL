@@ -4,13 +4,13 @@
 static volatile uint32_t ramp_cnt = 0;		
 
 
-void Ramp_Updata()
+void ramp_updata()
 {
 	++ramp_cnt;
 }
 
 
-void Ramp_Set( Ramp *ramp)
+void ramp_set( Ramp *ramp)
 {
 	ramp->time = ramp_cnt;
 }
@@ -18,7 +18,7 @@ void Ramp_Set( Ramp *ramp)
 
 
 
-float Ramp_Calc( Ramp *ramp, uint32_t time, uint8_t dir)
+float ramp_calc( Ramp *ramp, uint32_t time, uint8_t dir)
 {
 	uint32_t diff;
 	

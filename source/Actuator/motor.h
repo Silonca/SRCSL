@@ -37,21 +37,21 @@ typedef struct
 } Motor;
 
 
-void Motor_Init( Motor *motor, uint32_t encoder_type);          
-void Motor_Speed_PID_Init( Motor *motor, uint8_t mode, float max_out, float max_iout, float p, float i, float d);
-void Motor_Position_PID_Init( Motor *motor, uint8_t mode, float max_out, float max_iout, float p, float i, float d);
-void Motor_Rotation_Func_Init( void ( *motor_rotation_func)(float pid_out));
+void motor_init( Motor *motor, uint32_t encoder_type);          
+void motor_speed_pid_init( Motor *motor, uint8_t mode, float max_out, float max_iout, float p, float i, float d);
+void motor_position_pid_init( Motor *motor, uint8_t mode, float max_out, float max_iout, float p, float i, float d);
+void motor_rotation_func_init( void ( *motor_rotation_func)(float pid_out));
 
-uint32_t Motor_Stall_Test(Motor *motor);
+uint32_t motor_stall_test(Motor *motor);
 
-int32_t Motor_Speed_Ctrl_Calc(Motor *motor, float speed);
-int32_t Motor_Position_Ctrl_Calc(Motor *motor, float position);
-int32_t Motor_Relative_Position_Ctrl_Calc(Motor *motor, float position);
+int32_t motor_speed_ctrl_calc( Motor *motor, float speed);
+int32_t motor_position_ctrl_calc( Motor *motor, float position);
+int32_t motor_relative_position_ctrl_calc( Motor *motor, float position);
 
-void Motor_Range_Get( Motor *motor, int32_t step);
-void Motor_Set_Relative_Zero( Motor *motor, int32_t zero);
+void motor_range_get( Motor *motor, int32_t step);
+void motor_set_relative_zero( Motor *motor, int32_t zero);
 
-void Motor_Rotation( Motor *motor);
+void motor_rotation( Motor *motor);
 
 //Servo
 typedef struct 
@@ -66,8 +66,8 @@ typedef struct
 } Servo;
 
 
-void Motor_Servo_Init(Servo *servo, void ( *servo_set_func)(uint32_t ));
-void Motor_Servo_Range_set( Servo * servo, uint32_t origin_range_begin, uint32_t origin_range_end, int32_t range_begin, int32_t range_end);
-void Motor_Servo_Set( Servo *servo, int32_t set);
+void motor_servo_init(Servo *servo, void ( *servo_set_func)(uint32_t ));
+void motor_servo_range_set( Servo * servo, uint32_t origin_range_begin, uint32_t origin_range_end, int32_t range_begin, int32_t range_end);
+void motor_servo_set( Servo *servo, int32_t set);
 
 #endif
