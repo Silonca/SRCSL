@@ -1,4 +1,4 @@
-#include "Absolute_Encoder.h"
+#include "absolute_encoder.h"
 
 void absolute_encoder_init( Absolute_Encoder *encoder, uint32_t range, uint32_t angle_abs)
 {

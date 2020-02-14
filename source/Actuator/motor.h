@@ -1,9 +1,9 @@
 #ifndef MOTOR_H_INCLUDED
 #define MOTOR_H_INCLUDED
 
-#include "../Algorithm/pid.h"
-#include "../Sensor/Absolute_Encoder.h"
-#include "../Sensor/Incremental_Encoder.h"
+#include "../algorithm/pid.h"
+#include "../sensor/absolute_encoder.h"
+#include "../sensor/incremental_encoder.h"
 
 #define STALL_PID_OUT_RATIO  (0.7f)
 #define STALL_PID_IOUT_RATIO (0.7f)

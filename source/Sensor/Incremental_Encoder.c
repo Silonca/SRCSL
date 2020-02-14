@@ -1,4 +1,4 @@
-#include "Incremental_Encoder.h"
+#include "incremental_encoder.h"
 
 void incremental_encoder_init( Incremental_Encoder *encoder, uint32_t range)
 {

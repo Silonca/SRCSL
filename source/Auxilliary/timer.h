@@ -19,9 +19,9 @@ uint32_t timer_get( Timer *timer);                                      //Run th
 //----------------------------------------------------------
 
 
-#define ACT_REPEAT_COUNTLESS -1
-#define ACT_LIST_END -1
-#define ACT_LIST_FORMAT_ERROR -2
+#define PLAYER_REPEAT_COUNTLESS -1
+#define PLAYER_LIST_END -1
+#define PLAYER_LIST_FORMAT_ERROR -2
 
 
 typedef struct
@@ -42,29 +42,29 @@ typedef struct
 
     uint8_t transition_flag;
 
-    void ( *act_func)(uint8_t action_code);     //Must be a non-blocking function
-} Act_Orderly;
+    void ( *act_func)(uint8_t state_code);     //Must be a non-blocking function
+} State_Player;
 
 
-void act_init( Act_Orderly *ao, char *list, void ( *act_func)( uint8_t action_code));
+void player_init( State_Player *player, char *list, void ( *act_func)( uint8_t action_code));
 
-void act_start( Act_Orderly *ao);                       //Start and Continue
-void act_pause( Act_Orderly *ao);                       //Pause
-void act_stop( Act_Orderly *ao);                        //Stop
-void act_restart( Act_Orderly *ao);                     //Restart
+void player_start( State_Player *player);                       //Start and Continue
+void player_pause( State_Player *player);                       //Pause
+void player_stop( State_Player *player);                        //Stop
+void player_restart( State_Player *player);                     //Restart
 
-void act_jump_seq( Act_Orderly *ao, uint8_t seq);       //Jump to a specified frame
-void act_jump_time( Act_Orderly *ao, uint32_t time);    //Jump to the frame after the given time
+void player_jump_seq( State_Player *player, uint8_t seq);       //Jump to a specified frame
+void player_jump_time( State_Player *player, uint32_t time);    //Jump to the frame after the given time
 
-uint8_t act_get_progress(Act_Orderly *ao);
-uint8_t act_get_Length(Act_Orderly *ao);
+uint8_t player_get_progress(State_Player *player);
+uint8_t player_get_Length(State_Player *player);
 
-void act_set_repeat( Act_Orderly *ao, int32_t times);
-int32_t act_get_repeat_time( Act_Orderly *ao);
+void player_set_repeat( State_Player *player, int32_t times);
+int32_t player_get_repeat_time( State_Player *player);
 
-void act_set_transition( Act_Orderly *ao, uint8_t flag);
+void player_set_transition( State_Player *player, uint8_t flag);
 
-void act_server( Act_Orderly *ao);                      //Server Function, must run periodically
+void player_server( State_Player *player);                      //Server Function, must run periodically
 
 
 

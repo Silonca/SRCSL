@@ -27,184 +27,184 @@ uint32_t timer_get( Timer *timer)
 
 //------------------------------------------------------------
 
-void act_init( Act_Orderly *ao, char *list, void ( *act_func)( uint8_t action_code))
+void player_init( State_Player *player, char *list, void ( *act_func)( uint8_t action_code))
 {
-    ao->list = list;
+    player->list = list;
 
-    ao->pause_flag = SET;
-    ao->timer_start_flag = RESET;
-    ao->processing_index = 0;
-    ao->processing_action = 0;
-    ao->processing_time = 0;
+    player->pause_flag = SET;
+    player->timer_start_flag = RESET;
+    player->processing_index = 0;
+    player->processing_action = 0;
+    player->processing_time = 0;
 
-    ao->act_func = act_func;
+    player->act_func = act_func;
 }
 
 
-void act_start( Act_Orderly *ao)
+void player_start( State_Player *player)
 {
-    ao->pause_flag = RESET;
-    ao->timer_start_flag = SET;
+    player->pause_flag = RESET;
+    player->timer_start_flag = SET;
 }
 
 
-void act_pause( Act_Orderly *ao)
+void player_pause( State_Player *player)
 {
-    ao->pause_flag = SET;
+    player->pause_flag = SET;
 }
 
 
-void act_stop( Act_Orderly *ao)
+void player_stop( State_Player *player)
 {
-    ao->pause_flag = SET;
-    ao->processing_index = 0;
+    player->pause_flag = SET;
+    player->processing_index = 0;
 }
 
 
-void act_restart( Act_Orderly *ao)
+void player_restart( State_Player *player)
 {
-    ao->processing_index = 0;
-    ao->pause_flag = RESET;
-    ao->timer_start_flag = SET;
+    player->processing_index = 0;
+    player->pause_flag = RESET;
+    player->timer_start_flag = SET;
 }
 
 
-void act_jump_seq( Act_Orderly *ao, uint8_t seq)
+void player_jump_seq( State_Player *player, uint8_t seq)
 {
-    act_restart( ao);
+    player_restart( player);
     for( uint8_t a = 0; a < seq; ++a)
     {
-        act_list_analyse( ao);
-        ++ao->processing_index;
+        player_list_analyse( player);
+        ++player->processing_index;
     }
 }
 
 
-void act_jump_time( Act_Orderly *ao, uint32_t time)
+void player_jump_time( State_Player *player, uint32_t time)
 {
     uint32_t time_sum = 0;
-    act_restart( ao);
+    player_restart( player);
     do
     {
-        act_list_analyse( ao);
-        ++ao->processing_index;
-        time_sum += ao->processing_time;
+        player_list_analyse( player);
+        ++player->processing_index;
+        time_sum += player->processing_time;
     }
     while( time_sum < time);
 }
 
-uint8_t act_list_analyse( Act_Orderly *ao)
+uint8_t player_list_analyse( State_Player *player)
 {
     //get the next action from the string
-    ao->processing_action = atoi( ao->list + ao->list_process);
+    player->processing_action = atoi( player->list + player->list_process);
     //handling malformed
-    if( ao->processing_action == -1 || ao->processing_action == 0)
+    if( player->processing_action == -1 || player->processing_action == 0)
     {
-        act_stop( ao);
-        return ACT_LIST_FORMAT_ERROR;
+        player_stop( player);
+        return PLAYER_LIST_FORMAT_ERROR;
     }
 
     //find the "," and next pending subscript index
-    for( ++ao->list_process; ao->list[ ao->list_process] != ','; ++ao->list_process)
+    for( ++player->list_process; player->list[ player->list_process] != ','; ++player->list_process)
     {
-        if( ao->list[ ao->list_process] != '\0')
+        if( player->list[ player->list_process] != '\0')
         {
-            act_stop( ao);
-            return ACT_LIST_END;
+            player_stop( player);
+            return PLAYER_LIST_END;
         }
     }
 
     //get the next latency from the string
-    ao->processing_time = atoi( ao->list + ao->list_process);
+    player->processing_time = atoi( player->list + player->list_process);
     //handling malformed input
-    if( ao->processing_time == -1 || ao->processing_time == 0)
+    if( player->processing_time == -1 || player->processing_time == 0)
     {
-        act_stop( ao);
-        return ACT_LIST_FORMAT_ERROR;
+        player_stop( player);
+        return PLAYER_LIST_FORMAT_ERROR;
     }
 
     //find the ";" and next pending subscript index
-    for( ++ao->list_process; ao->list[ ao->list_process] != ';'; ++ao->list_process)
+    for( ++player->list_process; player->list[ player->list_process] != ';'; ++player->list_process)
     {
-        if( ao->list[ ao->list_process] != '\0')
+        if( player->list[ player->list_process] != '\0')
         {
-            act_stop( ao);
-            return ACT_LIST_END;            
+            player_stop( player);
+            return PLAYER_LIST_END;            
         }
 
     }
     return 0;
 }
 
-void act_server( Act_Orderly *ao)
+void player_server( State_Player *player)
 {
-    if( ao->pause_flag == RESET)
+    if( player->pause_flag == RESET)
     {
-        if( ao->timer_start_flag == SET)
+        if( player->timer_start_flag == SET)
         {
-            timer_set( &( ao->timer));
-            ao->timer_start_flag = RESET;
+            timer_set( &( player->timer));
+            player->timer_start_flag = RESET;
         }
 
-        if( timer_get( &( ao->timer)) % ao->processing_time == 0)
+        if( timer_get( &( player->timer)) % player->processing_time == 0)
         {
-            /*if( Act_List_Analyse( ao) == -1)
+            /*if( player_list_analyse( player) == -1)
             {
                 //some code to handle the malformed input
             }*/
-            switch( act_list_analyse( ao))
+            switch( player_list_analyse( player))
             {
-                case ACT_LIST_END:
-                    if( ao->repeat_time++ < ao->repear_time_set)
-                        act_restart( ao);
+                case PLAYER_LIST_END:
+                    if( player->repeat_time++ < player->repear_time_set)
+                        player_restart( player);
                     break;
-                case ACT_LIST_FORMAT_ERROR:
+                case PLAYER_LIST_FORMAT_ERROR:
                     break;
                 default:
                     break;
             }
-            ao->act_func( ao->processing_action);
+            player->act_func( player->processing_action);
         }
     }
     else 
     {
-        ++ao->processing_index;
+        ++player->processing_index;
     }
     
 }
 
 
 
-uint8_t act_get_progress(Act_Orderly *ao)
+uint8_t player_get_progress(State_Player *player)
 {
-    return ao->processing_index;
+    return player->processing_index;
 }
 
-uint8_t act_get_length(Act_Orderly *ao)
+uint8_t player_get_length(State_Player *player)
 {
     uint8_t cnt = 0;
-    for( uint32_t a = 0; ao->list[a] != '\0'; ++a)
+    for( uint32_t a = 0; player->list[a] != '\0'; ++a)
     {
-        if( ao->list[a] == ';')
+        if( player->list[a] == ';')
             ++cnt;
     }
 
     return cnt;
 }
 
-void act_set_repeat( Act_Orderly *ao, int32_t times)
+void player_set_repeat( State_Player *player, int32_t times)
 {
-    ao->repear_time_set = times;
+    player->repear_time_set = times;
 }
 
-int32_t act_get_repeat_time( Act_Orderly *ao)
+int32_t player_get_repeat_time( State_Player *player)
 {
-    return ao->repeat_time;
+    return player->repeat_time;
 }
 
-void act_set_transition( Act_Orderly *ao, uint8_t flag)
+void player_set_transition( State_Player *player, uint8_t flag)
 {
-    ao->transition_flag = flag;
+    player->transition_flag = flag;
 }
 
 
