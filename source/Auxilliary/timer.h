@@ -32,7 +32,7 @@ typedef struct
     uint8_t pause_flag;
     uint8_t timer_start_flag;
     uint8_t processing_index;                   //It seems to be useless
-    uint8_t processing_action;
+    int32_t processing_action;
     uint32_t processing_time;
 
     Timer timer;
@@ -41,30 +41,31 @@ typedef struct
     int32_t repear_time_set;
 
     uint8_t transition_flag;
+    int32_t processing_action_last;
 
     void ( *act_func)(uint8_t state_code);     //Must be a non-blocking function
-} State_Player;
+} StatePlayer;
 
 
-void player_init( State_Player *player, char *list, void ( *act_func)( uint8_t action_code));
+void player_init( StatePlayer *player, char *list, void ( *act_func)( uint8_t action_code));
 
-void player_start( State_Player *player);                       //Start and Continue
-void player_pause( State_Player *player);                       //Pause
-void player_stop( State_Player *player);                        //Stop
-void player_restart( State_Player *player);                     //Restart
+void player_start( StatePlayer *player);                       //Start and Continue
+void player_pause( StatePlayer *player);                       //Pause
+void player_stop( StatePlayer *player);                        //Stop
+void player_restart( StatePlayer *player);                     //Restart
 
-void player_jump_seq( State_Player *player, uint8_t seq);       //Jump to a specified frame
-void player_jump_time( State_Player *player, uint32_t time);    //Jump to the frame after the given time
+void player_jump_seq( StatePlayer *player, uint8_t seq);       //Jump to a specified frame
+void player_jump_time( StatePlayer *player, uint32_t time);    //Jump to the frame after the given time
 
-uint8_t player_get_progress(State_Player *player);
-uint8_t player_get_Length(State_Player *player);
+uint8_t player_get_progress(StatePlayer *player);
+uint8_t player_get_Length(StatePlayer *player);
 
-void player_set_repeat( State_Player *player, int32_t times);
-int32_t player_get_repeat_time( State_Player *player);
+void player_set_repeat( StatePlayer *player, int32_t times);
+int32_t player_get_repeat_time( StatePlayer *player);
 
-void player_set_transition( State_Player *player, uint8_t flag);
+void player_set_transition( StatePlayer *player, uint8_t flag);
 
-void player_server( State_Player *player);                      //Server Function, must run periodically
+void player_server( StatePlayer *player);                      //Server Function, must run periodically
 
 
 

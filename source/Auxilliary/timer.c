@@ -27,7 +27,7 @@ uint32_t timer_get( Timer *timer)
 
 //------------------------------------------------------------
 
-void player_init( State_Player *player, char *list, void ( *act_func)( uint8_t action_code))
+void player_init( StatePlayer *player, char *list, void ( *act_func)( uint8_t action_code))
 {
     player->list = list;
 
@@ -41,27 +41,27 @@ void player_init( State_Player *player, char *list, void ( *act_func)( uint8_t a
 }
 
 
-void player_start( State_Player *player)
+void player_start( StatePlayer *player)
 {
     player->pause_flag = RESET;
     player->timer_start_flag = SET;
 }
 
 
-void player_pause( State_Player *player)
+void player_pause( StatePlayer *player)
 {
     player->pause_flag = SET;
 }
 
 
-void player_stop( State_Player *player)
+void player_stop( StatePlayer *player)
 {
     player->pause_flag = SET;
     player->processing_index = 0;
 }
 
 
-void player_restart( State_Player *player)
+void player_restart( StatePlayer *player)
 {
     player->processing_index = 0;
     player->pause_flag = RESET;
@@ -69,7 +69,7 @@ void player_restart( State_Player *player)
 }
 
 
-void player_jump_seq( State_Player *player, uint8_t seq)
+void player_jump_seq( StatePlayer *player, uint8_t seq)
 {
     player_restart( player);
     for( uint8_t a = 0; a < seq; ++a)
@@ -80,7 +80,7 @@ void player_jump_seq( State_Player *player, uint8_t seq)
 }
 
 
-void player_jump_time( State_Player *player, uint32_t time)
+void player_jump_time( StatePlayer *player, uint32_t time)
 {
     uint32_t time_sum = 0;
     player_restart( player);
@@ -93,9 +93,10 @@ void player_jump_time( State_Player *player, uint32_t time)
     while( time_sum < time);
 }
 
-uint8_t player_list_analyse( State_Player *player)
+uint8_t player_list_analyse( StatePlayer *player)
 {
     //get the next action from the string
+    player->processing_action_last = player->processing_action;
     player->processing_action = atoi( player->list + player->list_process);
     //handling malformed
     if( player->processing_action == -1 || player->processing_action == 0)
@@ -136,7 +137,7 @@ uint8_t player_list_analyse( State_Player *player)
     return 0;
 }
 
-void player_server( State_Player *player)
+void player_server( StatePlayer *player)
 {
     if( player->pause_flag == RESET)
     {
@@ -163,7 +164,14 @@ void player_server( State_Player *player)
                 default:
                     break;
             }
+
             player->act_func( player->processing_action);
+        }
+        else if( player->transition_flag == SET)        //transition support
+        {
+            player->act_func( player->processing_action
+                            + ( player->processing_action - player->processing_action_last)
+                            * ( timer_get( &( player->timer)) / player->processing_time));
         }
     }
     else 
@@ -175,12 +183,12 @@ void player_server( State_Player *player)
 
 
 
-uint8_t player_get_progress(State_Player *player)
+uint8_t player_get_progress(StatePlayer *player)
 {
     return player->processing_index;
 }
 
-uint8_t player_get_length(State_Player *player)
+uint8_t player_get_length(StatePlayer *player)
 {
     uint8_t cnt = 0;
     for( uint32_t a = 0; player->list[a] != '\0'; ++a)
@@ -192,17 +200,17 @@ uint8_t player_get_length(State_Player *player)
     return cnt;
 }
 
-void player_set_repeat( State_Player *player, int32_t times)
+void player_set_repeat( StatePlayer *player, int32_t times)
 {
     player->repear_time_set = times;
 }
 
-int32_t player_get_repeat_time( State_Player *player)
+int32_t player_get_repeat_time( StatePlayer *player)
 {
     return player->repeat_time;
 }
 
-void player_set_transition( State_Player *player, uint8_t flag)
+void player_set_transition( StatePlayer *player, uint8_t flag)
 {
     player->transition_flag = flag;
 }
