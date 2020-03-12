@@ -6,6 +6,9 @@ static volatile uint32_t timer_cnt = 0;
 
 enum { SET, RESET};
 
+uint8_t player_list_analyse( StatePlayer *player);
+
+
 void timer_updata()
 {
     ++timer_cnt;
@@ -27,7 +30,7 @@ uint32_t timer_get( Timer *timer)
 
 //------------------------------------------------------------
 
-void player_init( StatePlayer *player, char *list, void ( *act_func)( uint8_t action_code))
+void player_init( StatePlayer *player, uint8_t mode, char *list, void ( *act_func)( uint8_t action_code))
 {
     player->list = list;
 
@@ -36,7 +39,10 @@ void player_init( StatePlayer *player, char *list, void ( *act_func)( uint8_t ac
     player->processing_index = 0;
     player->processing_action = 0;
     player->processing_time = 0;
+    
+    player->mode = mode;
 
+    player->analyse_func = player_list_analyse;
     player->act_func = act_func;
 }
 
@@ -95,16 +101,10 @@ void player_jump_time( StatePlayer *player, uint32_t time)
 
 uint8_t player_list_analyse( StatePlayer *player)
 {
-    //get the next action from the string
-    player->processing_action_last = player->processing_action;
-    player->processing_action = atoi( player->list + player->list_process);
-    //handling malformed
-    if( player->processing_action == -1 || player->processing_action == 0)
-    {
-        player_stop( player);
-        return PLAYER_LIST_FORMAT_ERROR;
-    }
+    int32_t num_1 = 0, num_2 = 0;
 
+    //get the 1st parameter
+    num_1 = atoi( player->list + player->list_process);
     //find the "," and next pending subscript index
     for( ++player->list_process; player->list[ player->list_process] != ','; ++player->list_process)
     {
@@ -115,15 +115,8 @@ uint8_t player_list_analyse( StatePlayer *player)
         }
     }
 
-    //get the next latency from the string
-    player->processing_time = atoi( player->list + player->list_process);
-    //handling malformed input
-    if( player->processing_time == -1 || player->processing_time == 0)
-    {
-        player_stop( player);
-        return PLAYER_LIST_FORMAT_ERROR;
-    }
-
+    //get the 2nd parameter
+    num_2 = atoi( player->list + player->list_process);
     //find the ";" and next pending subscript index
     for( ++player->list_process; player->list[ player->list_process] != ';'; ++player->list_process)
     {
@@ -134,8 +127,34 @@ uint8_t player_list_analyse( StatePlayer *player)
         }
 
     }
+
+    //handling malformed
+    if( num_1 == -1 || num_2 == -1)
+    {
+        player_stop( player);
+        return PLAYER_LIST_FORMAT_ERROR;
+    }
+
+    //do-wait mode parameter position swap
+    if( player->mode == PLAYER_MODE_DOWAIT)
+    {
+        //swap num_1 and num_2
+        num_1 = num_1 + num_2;
+        num_2 = num_1 - num_2;
+        num_1 = num_1 - num_2;
+    }
+    
+    //get the next action from the string
+    player->processing_action_last = player->processing_action;         
+    player->processing_action = num_1;
+
+    //get the next latency from the string
+    player->processing_time = num_2;
+    
+
     return 0;
 }
+
 
 void player_server( StatePlayer *player)
 {
@@ -143,6 +162,23 @@ void player_server( StatePlayer *player)
     {
         if( player->timer_start_flag == SET)
         {
+            if( player->mode == PLAYER_MODE_DOWAIT)
+            {
+                //do once before wait
+                switch( player->analyse_func( player)/*player_list_analyse( player)*/)
+                {
+                    case PLAYER_LIST_END:
+                        if( player->repeat_time++ < player->repear_time_set)
+                            player_restart( player);
+                        break;
+                    case PLAYER_LIST_FORMAT_ERROR:
+                        break;
+                    default:
+                        break;
+                }
+                player->act_func( player->processing_action);                
+            }
+
             timer_set( &( player->timer));
             player->timer_start_flag = RESET;
         }
@@ -153,7 +189,7 @@ void player_server( StatePlayer *player)
             {
                 //some code to handle the malformed input
             }*/
-            switch( player_list_analyse( player))
+            switch( player->analyse_func( player)/*player_list_analyse( player)*/)
             {
                 case PLAYER_LIST_END:
                     if( player->repeat_time++ < player->repear_time_set)
@@ -164,8 +200,8 @@ void player_server( StatePlayer *player)
                 default:
                     break;
             }
-
             player->act_func( player->processing_action);
+            
         }
         else if( player->transition_flag == SET)        //transition support
         {
@@ -180,7 +216,6 @@ void player_server( StatePlayer *player)
     }
     
 }
-
 
 
 uint8_t player_get_progress(StatePlayer *player)
@@ -213,6 +248,12 @@ int32_t player_get_repeat_time( StatePlayer *player)
 void player_set_transition( StatePlayer *player, uint8_t flag)
 {
     player->transition_flag = flag;
+    player->mode = PLAYER_MODE_DOWAIT;
 }
 
+
+void player_set_analyse_func( StatePlayer *player, uint8_t ( *analyse_func)(void *))
+{
+    player->analyse_func = analyse_func;
+}
 
