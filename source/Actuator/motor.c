@@ -1,23 +1,18 @@
 #include "motor.h"
 
-void motor_init( Motor *motor, uint32_t encoder_type)
+void motor_init( Motor *motor, Encoder *encoder, PID *speed_pid, PID *pos_pid)
 {
-    motor->encoder_type = encoder_type;
+    motor->range_begin = 0;
+    motor->range_end = 0;
+    motor->range_state = 0;
+    motor->relative_zero = 0;
 
+    encoder_clone( &(motor->encoder), encoder);
+    pid_clone( &(motor->speed_pid), speed_pid);
+    pid_clone( &(motor->position_pid), pos_pid);
 }
 
 
-void motor_speed_pid_init( Motor *motor, uint8_t mode, float max_out, float max_iout, float p, float i, float d)
-{
-    pid_init( &(motor->speed_pid), mode, max_out, max_iout, p, i, d);
-}
-
-
-
-void motor_position_pid_init( Motor *motor, uint8_t mode, float max_out, float max_iout, float p, float i, float d)
-{
-    pid_init( &(motor->position_pid), mode, max_out, max_iout, p, i, d);
-}
 
 void motor_rotation_func_init( Motor *motor, void ( *motor_rotation_func)(float pid_out))
 {
@@ -43,14 +38,9 @@ uint32_t motor_stall_test(Motor *motor)
 int32_t motor_speed_ctrl_calc(Motor *motor, float speed)
 {
     float get;
-    if( motor->encoder_type == ABSOLUTE_ENCODER)
-    {
-        get = absolute_encoder_get_d_value( &(motor->encoder.absolute));
-    }
-    else if( motor->encoder_type == INCREMENTAL_ENCODER)
-    {
-        get = incremental_encoder_get_d_value( &(motor->encoder.incremental));
-    }
+
+        get = encoder_get_d_value( &(motor->encoder));
+    
     return pid_calc( &(motor->speed_pid), get, speed);
 }
 
@@ -58,16 +48,9 @@ int32_t motor_speed_ctrl_calc(Motor *motor, float speed)
 int32_t motor_position_ctrl_calc(Motor *motor, float position)
 {
     float speed_get, position_get;
-    if( motor->encoder_type == ABSOLUTE_ENCODER)
-    {
-        speed_get = absolute_encoder_get_d_value( &(motor->encoder.absolute));
-        position_get = absolute_encoder_get_angle_abs(&(motor->encoder.absolute));
-    }
-    else if( motor->encoder_type == INCREMENTAL_ENCODER)
-    {
-        speed_get = incremental_encoder_get_d_value( &(motor->encoder.incremental));
-        position_get = incremental_encoder_get_angle_abs(&(motor->encoder.incremental));
-    }
+
+    speed_get = encoder_get_d_value( &(motor->encoder));
+    position_get = encoder_get_angle_abs(&(motor->encoder));
 
     pid_calc( &(motor->position_pid), position_get, position);
     pid_calc( &(motor->speed_pid), speed_get, motor->position_pid.out);
@@ -77,25 +60,20 @@ int32_t motor_position_ctrl_calc(Motor *motor, float position)
 
 int32_t motor_relative_position_ctrl_calc(Motor *motor, float position)
 {
-    motor_position_ctrl_calc( motor, position + motor->relative_zero);
+    return motor_position_ctrl_calc( motor, position + motor->relative_zero);
 }
 
 
 
-void motor_range_get(Motor *motor, int32_t step, void ( *motor_rotation_func)(float pid_out))
+void motor_range_get(Motor *motor, int32_t step)
 {
     if( motor->range_state == RANGE_END_OK)
         return ;
 
     float position_get;
-    if( motor->encoder_type == ABSOLUTE_ENCODER)
-    {
-        position_get = absolute_encoder_get_angle_abs(&(motor->encoder.absolute));
-    }
-    else if( motor->encoder_type == INCREMENTAL_ENCODER)
-    {
-        position_get = incremental_encoder_get_angle_abs(&(motor->encoder.incremental));
-    }
+
+    position_get = encoder_get_angle_abs(&(motor->encoder));
+    
 
     if( motor->range_state == RANGE_START)
     {
@@ -107,13 +85,13 @@ void motor_range_get(Motor *motor, int32_t step, void ( *motor_rotation_func)(fl
             pid_clear( &(motor->position_pid));
             pid_clear( &(motor->speed_pid));
             motor_position_ctrl_calc( motor, motor->range_begin + step);
-            motor_rotation_func( motor->position_pid.out);   
+            motor->motor_rotation_func( motor->position_pid.out);   
             return ;
         }
 
         motor->range_begin = position_get - step;
         motor_position_ctrl_calc( motor, motor->range_begin);
-        motor_rotation_func( motor->position_pid.out);   
+        motor->motor_rotation_func( motor->position_pid.out);   
                
     }
     else if( motor->range_state == RANGE_BEGIN_OK ) 
@@ -126,20 +104,21 @@ void motor_range_get(Motor *motor, int32_t step, void ( *motor_rotation_func)(fl
             pid_clear( &(motor->position_pid));
             pid_clear( &(motor->speed_pid));
             motor_position_ctrl_calc( motor, motor->range_end - step);
-            motor_rotation_func( motor->position_pid.out); 
+            motor->motor_rotation_func( motor->position_pid.out); 
             return ;
         }
 
         motor->range_end = position_get + step;
         motor_position_ctrl_calc( motor, motor->range_end);
-        motor_rotation_func( motor->position_pid.out);   
+        motor->motor_rotation_func( motor->position_pid.out);   
     }
 
 }
 
 void motor_set_relative_zero( Motor *motor, int32_t zero)
 {
-    motor->relative_zero = zero;
+    if( motor->encoder.enocder_type == ENCODER_ABSOLUTE)
+        motor->relative_zero = zero;
 }
 
 

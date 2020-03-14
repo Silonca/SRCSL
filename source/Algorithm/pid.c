@@ -129,3 +129,20 @@ void pid_set_deadband( PID *pid, float deadband)
 }
 
 
+void pid_clone( PID *des, PID *src)
+{
+	pid_init( des, src->pid_mode, src->max_out, src->max_iout, src->p, src->i, src->d);
+	
+	des->max_error = src->max_error;
+	des->deadband = src->deadband;
+	
+	/*des->pid_mode = src->pid_mode;
+	des->max_out = src->max_out;
+	des->max_iout = src->max_iout;
+
+	des->p = src->p;
+	des->i = src->i;
+	des->d = src->d;*/
+}
+
+

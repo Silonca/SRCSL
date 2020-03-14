@@ -48,6 +48,6 @@ void  pid_reset( PID *pid, float kp, float ki, float kd);
 void pid_set_maxerror( PID *pid, float max_error);                  
 void pid_set_deadband( PID *pid, float deadband);
 
-
+void pid_clone( PID *des, PID *src);
 
 #endif // PID_H_INCLUDED

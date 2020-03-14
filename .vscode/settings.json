@@ -4,6 +4,7 @@
         "corecrt_math.h": "c",
         "corecrt_math_defines.h": "c",
         "gimbal.h": "c",
-        "chassis_4w.h": "c"
+        "chassis_4w.h": "c",
+        "motor.h": "c"
     }
 }

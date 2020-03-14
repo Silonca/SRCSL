@@ -29,10 +29,10 @@ void gimbal_pitch_position_pid_init( Gimbal *gimbal, uint8_t mode, float max_out
 void gimbal_roll_speed_pid_init( Gimbal *gimbal, uint8_t mode, float max_out, float max_iout, float p, float i, float d);
 void gimbal_roll_position_pid_init( Gimbal *gimbal, uint8_t mode, float max_out, float max_iout, float p, float i, float d);
 
-void gimbal_ctrl( Gimbal *gimbal, float angle_yaw, float angle_pitch, float angle_roll);
-void gimbal_yaw_ctrl( Gimbal *gimbal, float angle);
-void gimbal_pitch_Ctrl( Gimbal *gimbal, float angle);
-void gimbal_roll_ctrl( Gimbal *gimbal, float angle);
+void gimbal_ctrl_calc( Gimbal *gimbal, float angle_yaw, float angle_pitch, float angle_roll);
+void gimbal_yaw_ctrl_calc( Gimbal *gimbal, float angle);
+void gimbal_pitch_ctrl_calc( Gimbal *gimbal, float angle);
+void gimbal_roll_ctrl_calc( Gimbal *gimbal, float angle);
 
 
 #endif

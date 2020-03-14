@@ -1,7 +1,7 @@
 #include "chassis.h"
 
 
-void chassis_init( Chassis *chassis)
+void chassis_init( Chassis *chassis, Motor *motor, uint8_t motor_num, Servo *servo, uint8_t servo_num)
 {
     chassis->motor = NULL;
     chassis->motor_num = 0;
@@ -15,17 +15,22 @@ void chassis_init( Chassis *chassis)
     chassis->v_x_max[CHASSIS_REVERSE] = 0;
     chassis->v_y_max[CHASSIS_REVERSE] = 0;
     chassis->v_yaw_max[CHASSIS_REVERSE] = 0;
+
+    chassis->motor = motor;
+    chassis->motor_num = motor_num;
+    chassis->servo = servo;
+    chassis->servo_num = servo_num;
 }
 
 
-void chassis_init_motor( Chassis *chassis, Motor *motor, uint8_t motor_num, uint32_t encoder_type)
+/*void chassis_init_motor( Chassis *chassis, Motor *motor, uint8_t motor_num)
 {
     chassis->motor = motor;
     chassis->motor_num = motor_num;
 
     for( int a = 0; a < motor_num; ++a)
     {
-       motor_init( &(chassis->motor[a]), encoder_type);
+       motor_init( &(chassis->motor[a]));
     } 
 }
 
@@ -53,7 +58,7 @@ void chassis_init_servo( Chassis *chassis, Servo *servo, uint8_t servo_num)
     chassis->servo = servo;
     chassis->servo_num = servo_num;
 }
-
+*/
 
 void chassis_set_v_max( Chassis *chassis, float v_x_max, float v_y_max, float v_yaw_max)
 {
@@ -75,12 +80,12 @@ void chassis_set_v_max_reverse( Chassis *chassis, float v_x_max, float v_y_max, 
 }
 
 
-
+/*
 void chassis_motor_init( Chassis *chassis, uint8_t motor_code, uint32_t encoder_type)
 {
     motor_init( &(chassis->motor[ motor_code]), encoder_type);
 }
-
+*/
 
 void chassis_motor_init_speed_pid( Chassis *chassis, uint8_t motor_code, uint8_t mode, float max_out, float max_iout, float p, float i, float d)
 {
@@ -99,7 +104,7 @@ void chassis_motor_init_position_pid( Chassis *chassis, uint8_t motor_code, uint
 
 
 
-void chassis_ctrl_2w( Chassis *chassis, float vx, float vyaw)
+void chassis_ctrl_calc_2w( Chassis *chassis, float vx, float vyaw)
 {
     float speed[2];
 
@@ -112,7 +117,7 @@ void chassis_ctrl_2w( Chassis *chassis, float vx, float vyaw)
     }
 }
 
-void chassis_ctrl_3w_omni( Chassis *chassis, uint8_t heading_mode, float vx, float vy, float vyaw)
+void chassis_ctrl_calc_3w_omni( Chassis *chassis, uint8_t heading_mode, float vx, float vy, float vyaw)
 {
     float speed[3];
 
@@ -139,7 +144,7 @@ void chassis_ctrl_3w_omni( Chassis *chassis, uint8_t heading_mode, float vx, flo
 }
 
 
-void chassis_ctrl_3w_omni_headless( Chassis *chassis, uint8_t heading_mode, float vx, float vy, float vyaw, float angle)
+void chassis_ctrl_calc_3w_omni_headless( Chassis *chassis, uint8_t heading_mode, float vx, float vy, float vyaw, float angle)
 {
     float speed[3];
     float v_x,v_y;
@@ -174,7 +179,7 @@ void chassis_ctrl_3w_omni_headless( Chassis *chassis, uint8_t heading_mode, floa
 
 
 
-void chassis_ctrl_4w_regular( Chassis *chassis, float vx, float vyaw)
+void chassis_ctrl_calc_4w_regular( Chassis *chassis, float vx, float vyaw)
 {
     float speed[4];
 
@@ -190,7 +195,7 @@ void chassis_ctrl_4w_regular( Chassis *chassis, float vx, float vyaw)
 }
 
 
-void chassis_ctrl_4w_mecanum( Chassis *chassis, float vx, float vy, float vyaw)
+void chassis_ctrl_calc_4w_mecanum( Chassis *chassis, float vx, float vy, float vyaw)
 {
     float speed[4];
 
@@ -207,14 +212,14 @@ void chassis_ctrl_4w_mecanum( Chassis *chassis, float vx, float vy, float vyaw)
 
 
 
-void chassis_ctrl_4w_omni( Chassis *chassis, float vx, float vy, float vyaw)
+void chassis_ctrl_calc_4w_omni( Chassis *chassis, float vx, float vy, float vyaw)
 {
-    chassis_ctrl_4w_mecanum( chassis, vx, vy, vyaw);
+    chassis_ctrl_calc_4w_mecanum( chassis, vx, vy, vyaw);
 }
 
 
 
-void chassis_ctrl_4w_mecanum_off_center( Chassis *chassis, float vx, float vy, float vyaw, float width_rate, float length_rate)
+void chassis_ctrl_calc_4w_mecanum_off_center( Chassis *chassis, float vx, float vy, float vyaw, float width_rate, float length_rate)
 {
     float speed[4];
 
@@ -232,7 +237,7 @@ void chassis_ctrl_4w_mecanum_off_center( Chassis *chassis, float vx, float vy, f
     }
 }
 
-void chassis_ctrl_4w_mecanum_headless( Chassis *chassis, float vx, float vy, float vyaw, float angle)
+void chassis_ctrl_calc_4w_mecanum_headless( Chassis *chassis, float vx, float vy, float vyaw, float angle)
 {
     float speed[4];
     float v_x,v_y;
@@ -254,14 +259,14 @@ void chassis_ctrl_4w_mecanum_headless( Chassis *chassis, float vx, float vy, flo
     }    
 }
 
-void chassis_ctrl_4w_omni_headless( Chassis *chassis, float vx, float vy, float vyaw, float angle)
+void chassis_ctrl_calc_4w_omni_headless( Chassis *chassis, float vx, float vy, float vyaw, float angle)
 {
     chassis_4w_mecanum_headless_ctrl( chassis, vx, vy, vyaw, angle);
 }
 
 
 
-void chassis_ctrl_car( Chassis *chassis, float v, float caster_angle)
+void chassis_ctrl_calc_car( Chassis *chassis, float v, float caster_angle)
 {
     motor_speed_ctrl_calc( &( chassis->motor[0]), v);
     motor_servo_set( &( chassis->servo[0]), caster_angle);
