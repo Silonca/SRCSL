@@ -1,10 +1,10 @@
 #include <stdio.h>
-
+#include <stdlib.h>
 #include "timer.h"
 
 enum {SET, RESET};
 
-void act_func(uint8_t action_code)
+void act_func(int32_t action_code)
 {
     printf("action:%d\n", action_code);
 }
@@ -33,7 +33,7 @@ int test_timer_stateplayer(void)
         timer_updata();
         player_server( &player);
 
-        system("clr");
+        system("cls");
         printf("time:%d\n\n",time);
         if( player.pause_flag == SET)
             printf("pause\t");

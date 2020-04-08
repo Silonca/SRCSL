@@ -14,8 +14,8 @@ Cartesian_Coordinates convert_P2C( Polar_Coordinates polar)
 {
     Cartesian_Coordinates temp;
 
-    temp.x = polar.distance * cos( polar.angle);
-    temp.y = polar.distance * sin( polar.angle);
+    temp.x = polar.distance * cosf( polar.angle);
+    temp.y = polar.distance * sinf( polar.angle);
 
     return temp;
 }
@@ -25,8 +25,8 @@ Polar_Coordinates convert_C2P( Cartesian_Coordinates cartesian)
 {
     Polar_Coordinates temp;
 
-    temp.angle = atan2( cartesian.y, cartesian.x);
-    temp.distance = sqrt( cartesian.x * cartesian.x + cartesian.y * cartesian.y);
+    temp.angle = atan2f( cartesian.y, cartesian.x);
+    temp.distance = sqrtf( cartesian.x * cartesian.x + cartesian.y * cartesian.y);
 
     return temp;
 }
@@ -37,8 +37,8 @@ Polar_Coordinates vector_P2P( Polar_Coordinates polar_begin, Polar_Coordinates p
     Polar_Coordinates temp;
 
     temp.angle = polar_end.angle - polar_begin.angle;
-    while( temp.angle > M_PI_2) temp.angle -= M_PI;
-    while( temp.angle < -M_PI_2) temp.angle += M_PI;
+    while( temp.angle > M_PI_2) temp.angle -= (float)M_PI;
+    while( temp.angle < -M_PI_2) temp.angle += (float)M_PI;
     temp.distance = polar_end.distance - polar_begin.distance;
 
     return temp;

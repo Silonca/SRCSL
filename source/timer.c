@@ -30,7 +30,7 @@ uint32_t timer_get( Timer *timer)
 
 //------------------------------------------------------------
 
-void player_init( StatePlayer *player, uint8_t mode, char *list, void ( *act_func)( uint8_t action_code))
+void player_init( StatePlayer *player, uint8_t mode, char *list, void ( *act_func)( int32_t action_code))
 {
     player->list = list;
 

@@ -120,21 +120,21 @@ void chassis_ctrl_calc_2w( Chassis *chassis, float vx, float vyaw)
 
 void chassis_ctrl_calc_3w_omni( Chassis *chassis, uint8_t heading_mode, float vx, float vy, float vyaw)
 {
-    float speed[3];
+	float speed[3] = {0};
     int a;
 
     //untested !!!
     if( heading_mode == WHEEL_3W_HEADING_MOTOR)
     {
         speed[ WHEEL_3W_ONE]    = vy + vyaw;
-        speed[ WHEEL_3W_TWO]    = -( 0.5f * vy - sqrt(3) / 2 * vx - vyaw);
-        speed[ WHEEL_3W_THREE]  = ( 0.5f * vy - sqrt(3) / 2 * vx + vyaw);        
+        speed[ WHEEL_3W_TWO]    = -( 0.5f * vy - sqrtf(3) / 2 * vx - vyaw);
+        speed[ WHEEL_3W_THREE]  = ( 0.5f * vy - sqrtf(3) / 2 * vx + vyaw);        
     }
     else if( heading_mode == WHEEL_3W_HEADING_BETWEEN_MOTOR)
     {
         speed[ WHEEL_3W_ONE]    = vy + vyaw;
-        speed[ WHEEL_3W_TWO]    = -( 0.5f * vy - sqrt(3) / 2 * vx - vyaw);
-        speed[ WHEEL_3W_THREE]  = ( 0.5f * vy - sqrt(3) / 2 * vx + vyaw);    
+        speed[ WHEEL_3W_TWO]    = -( 0.5f * vy - sqrtf(3) / 2 * vx - vyaw);
+        speed[ WHEEL_3W_THREE]  = ( 0.5f * vy - sqrtf(3) / 2 * vx + vyaw);    
     }
 
 
@@ -148,12 +148,12 @@ void chassis_ctrl_calc_3w_omni( Chassis *chassis, uint8_t heading_mode, float vx
 
 void chassis_ctrl_calc_3w_omni_headless( Chassis *chassis, uint8_t heading_mode, float vx, float vy, float vyaw, float angle)
 {
-    float speed[3];
+	float speed[3] = {0};
     float v_x,v_y;
     int a;
 
-    v_x = vx * cos( angle) - vy * sin( -angle);
-    v_y = -vx * sin( angle) + vy * cos( -angle);
+    v_x = vx * cosf( angle) - vy * sinf( -angle);
+    v_y = -vx * sinf( angle) + vy * cosf( -angle);
 
     vx = v_x;
     vy = v_y;
@@ -162,14 +162,14 @@ void chassis_ctrl_calc_3w_omni_headless( Chassis *chassis, uint8_t heading_mode,
     if( heading_mode == WHEEL_3W_HEADING_MOTOR)
     {
         speed[ WHEEL_3W_ONE]    = vy + vyaw;
-        speed[ WHEEL_3W_TWO]    = -( 0.5f * vy - sqrt(3) / 2 * vx - vyaw);
-        speed[ WHEEL_3W_THREE]  = ( 0.5f * vy - sqrt(3) / 2 * vx + vyaw);        
+        speed[ WHEEL_3W_TWO]    = -( 0.5f * vy - sqrtf(3) / 2 * vx - vyaw);
+        speed[ WHEEL_3W_THREE]  = ( 0.5f * vy - sqrtf(3) / 2 * vx + vyaw);        
     }
     else if( heading_mode == WHEEL_3W_HEADING_BETWEEN_MOTOR)
     {
         speed[ WHEEL_3W_ONE]    = vy + vyaw;
-        speed[ WHEEL_3W_TWO]    = -( 0.5f * vy - sqrt(3) / 2 * vx - vyaw);
-        speed[ WHEEL_3W_THREE]  = ( 0.5f * vy - sqrt(3) / 2 * vx + vyaw);    
+        speed[ WHEEL_3W_TWO]    = -( 0.5f * vy - sqrtf(3) / 2 * vx - vyaw);
+        speed[ WHEEL_3W_THREE]  = ( 0.5f * vy - sqrtf(3) / 2 * vx + vyaw);    
     }
 
 
@@ -249,8 +249,8 @@ void chassis_ctrl_calc_4w_mecanum_headless( Chassis *chassis, float vx, float vy
     float v_x,v_y;
     int a;
 
-    v_x = vx * cos( angle) - vy * sin( -angle);
-    v_y = -vx * sin( angle) + vy * cos( -angle);
+    v_x = vx * cosf( angle) - vy * sinf( -angle);
+    v_y = -vx * sinf( angle) + vy * cosf( -angle);
 
     vx = v_x;
     vy = v_y;
@@ -273,7 +273,7 @@ void chassis_ctrl_calc_4w_omni_headless( Chassis *chassis, float vx, float vy, f
 
 
 
-void chassis_ctrl_calc_car( Chassis *chassis, float v, float caster_angle)
+void chassis_ctrl_calc_car( Chassis *chassis, float v, int32_t caster_angle)
 {
     motor_speed_ctrl_calc( &( chassis->motor[0]), v);
     motor_servo_set( &( chassis->servo[0]), caster_angle);

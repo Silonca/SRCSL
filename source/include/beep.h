@@ -1,4 +1,4 @@
-#ifndef BEEP_H_INCLUDED
+﻿#ifndef BEEP_H_INCLUDED
 #define BEEP_H_INCLUDED
 
 #ifdef __cplusplus
@@ -45,7 +45,7 @@ typedef struct
 
 
 void music_init(BeepMusic *beep_music, Beep *beep, char *music);			        //音乐曲谱设置
-void music_set_deadtime( BeepMusic *beep_music, int dead_time);
+void music_set_deadtime( BeepMusic *beep_music, float dead_time);
 
 void music_start( BeepMusic *beep_music);
 void music_pause( BeepMusic *beep_music);
@@ -56,7 +56,7 @@ void music_jump_time( BeepMusic *beep_music, uint32_t time);    //Jump to the fr
 void music_set_repeat( BeepMusic *beep_music, int32_t times);
 
 uint8_t music_get_progress(BeepMusic *beep_music);
-uint8_t music_get_Length(BeepMusic *beep_music);
+uint8_t music_get_length(BeepMusic *beep_music);
 int32_t music_get_repeat_time( BeepMusic *beep_music);
 
 void music_server( BeepMusic *beep_music);			//蜂鸣器音乐服务

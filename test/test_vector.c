@@ -23,7 +23,8 @@ int test_vector(void)
 
     while(1)
     {
-        char c;int a;
+        char c;
+		int a;
         scanf("mode:%c", &c);
         switch(c)
         {
@@ -42,7 +43,7 @@ int test_vector(void)
             }break;
             case 'p':
             {
-                for(a = 0; a < vector_size( &vector); ++a)
+                for(a = 0; (unsigned int)a < vector_size( &vector); ++a)
                 {
                     printf("a=%5d,b=%5d\n",vector.item_space[a]->a,vector.item_space[a]->b);
                 }

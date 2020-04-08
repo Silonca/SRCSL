@@ -1,6 +1,7 @@
 #include "include/menu.h"
 
 #include <string.h>
+#include <stdlib.h>
 
 void menu_init( Menu *menu)
 {
@@ -23,6 +24,8 @@ int menu_set_path( Menu *menu, char *path)
     for( name = strtok( path, "/"); path != NULL; name = strtok( path, "/"))
     {
         //to find the path
+		if (menu->current_node->str == NULL)
+			return -4;
         while( strncmp( name, menu->current_node->str, strlen(name)) != 0)
         {
             //don't exist,establish one
@@ -49,10 +52,11 @@ int menu_set_path( Menu *menu, char *path)
 
 
     }
+	return 0;
 }
 
 
-int menu_add( Menu *menu, char *name, char* (*func)())
+int menu_add( Menu *menu, char *name, void (*func)(void))
 {
     menu->current_node->sibling = ( MenuNode*)malloc( sizeof( MenuNode));
     if( menu->current_node->sibling == NULL)

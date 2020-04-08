@@ -39,9 +39,9 @@ int32_t motor_speed_ctrl_calc(Motor *motor, float speed)
 {
     float get;
 
-        get = encoder_get_d_value( &(motor->encoder));
+    get = (float)encoder_get_d_value( &(motor->encoder));
     
-    return pid_calc( &(motor->speed_pid), get, speed);
+    return (int32_t)pid_calc( &(motor->speed_pid), get, speed);
 }
 
 
@@ -49,13 +49,13 @@ int32_t motor_position_ctrl_calc(Motor *motor, float position)
 {
     float speed_get, position_get;
 
-    speed_get = encoder_get_d_value( &(motor->encoder));
-    position_get = encoder_get_angle_abs(&(motor->encoder));
+    speed_get = (float)encoder_get_d_value( &(motor->encoder));
+    position_get = (float)encoder_get_angle_abs(&(motor->encoder));
 
     pid_calc( &(motor->position_pid), position_get, position);
     pid_calc( &(motor->speed_pid), speed_get, motor->position_pid.out);
 
-    return motor->speed_pid.out;
+    return (int32_t)motor->speed_pid.out;
 }
 
 int32_t motor_relative_position_ctrl_calc(Motor *motor, float position)
@@ -72,25 +72,25 @@ void motor_range_get(Motor *motor, int32_t step)
 
     float position_get;
 
-    position_get = encoder_get_angle_abs(&(motor->encoder));
+    position_get = (float)encoder_get_angle_abs(&(motor->encoder));
     
 
     if( motor->range_state == RANGE_START)
     {
         if( motor_stall_test( motor) == STALL )        
         {
-            motor->range_begin = position_get;
+            motor->range_begin = (int32_t)position_get;
             motor->range_state = RANGE_BEGIN_OK;
 
             pid_clear( &(motor->position_pid));
             pid_clear( &(motor->speed_pid));
-            motor_position_ctrl_calc( motor, motor->range_begin + step);
+            motor_position_ctrl_calc( motor, (float)(motor->range_begin + step));
             motor->motor_rotation_func( motor->position_pid.out);   
             return ;
         }
 
-        motor->range_begin = position_get - step;
-        motor_position_ctrl_calc( motor, motor->range_begin);
+        motor->range_begin = (int32_t)position_get - step;
+        motor_position_ctrl_calc( motor, (float)motor->range_begin);
         motor->motor_rotation_func( motor->position_pid.out);   
                
     }
@@ -98,18 +98,18 @@ void motor_range_get(Motor *motor, int32_t step)
     {
         if( motor_stall_test( motor) == STALL )        
         {
-            motor->range_end = position_get;
+            motor->range_end = (int32_t)position_get;
             motor->range_state = RANGE_END_OK;
 
             pid_clear( &(motor->position_pid));
             pid_clear( &(motor->speed_pid));
-            motor_position_ctrl_calc( motor, motor->range_end - step);
+            motor_position_ctrl_calc( motor, (float)(motor->range_end - step));
             motor->motor_rotation_func( motor->position_pid.out); 
             return ;
         }
 
-        motor->range_end = position_get + step;
-        motor_position_ctrl_calc( motor, motor->range_end);
+        motor->range_end = (int32_t)position_get + step;
+        motor_position_ctrl_calc( motor, (float)motor->range_end);
         motor->motor_rotation_func( motor->position_pid.out);   
     }
 
@@ -148,8 +148,8 @@ void motor_servo_range_set( Servo * servo, uint32_t origin_range_begin, uint32_t
 
 void motor_servo_set( Servo *servo, int32_t set)
 {
-    int32_t temp = (float)set / (float)(servo->range_end - servo->range_begin)
+    int32_t temp = (int32_t)((float)set / (float)(servo->range_end - servo->range_begin)
                      * ( servo->origin_range_end - servo->origin_range_begin) 
-                     + servo->origin_range_begin;
+                     + servo->origin_range_begin);
     servo->servo_set_func( temp);
 }

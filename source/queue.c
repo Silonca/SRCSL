@@ -8,9 +8,9 @@ void queue_init( Queue *queue)
 }
 
 
-int queue_push( Queue *queue, QueueItem *item)
+void queue_push( Queue *queue, QueueItem *item)
 {
-    return list_push_back( &(queue->list), item);
+    list_push_back( &(queue->list), item);
 }
 
 QueueItem* queue_pop( Queue *queue)

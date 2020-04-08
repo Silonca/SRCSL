@@ -17,6 +17,7 @@ uint32_t vector_find( Vector *vector, VectorItem *item, int ( *equal_func)( Vect
     for( index = 0; index < vector->size; ++index)
         if( equal_func( vector->item_space[index], item) == 0)
             return index;
+	return index;
 }
 
 int vector_insert( Vector *vector, VectorItem *item, uint32_t index)

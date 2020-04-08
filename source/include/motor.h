@@ -46,7 +46,7 @@ uint32_t motor_stall_test(Motor *motor);
 void motor_range_get( Motor *motor, int32_t step);
 void motor_set_relative_zero( Motor *motor, int32_t zero);
 
-void motor_rotation_func_init( void ( *motor_rotation_func)(float pid_out));
+void motor_rotation_func_init(Motor *motor, void(*motor_rotation_func)(float pid_out));
 void motor_rotation( Motor *motor);
 
 //Servo

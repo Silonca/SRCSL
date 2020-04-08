@@ -64,7 +64,7 @@ void chassis_ctrl_calc_4w_mecanum_headless( Chassis *chassis, float vx, float vy
 void chassis_ctrl_calc_4w_omni_headless( Chassis *chassis, float vx, float vy, float vyaw, float angle);
 void chassis_ctrl_calc_4w_mecanum_off_center( Chassis *chassis, float vx, float vy, float vyaw, float width_rate, float length_rate);
 
-void chassis_ctrl_calc_car( Chassis *chassis, float v, float caster_angle);
+void chassis_ctrl_calc_car( Chassis *chassis, float v, int32_t caster_angle);
 
 //void chassis_arrive( Chassis *chassis, float x, float y, float vxa_max, float vayaw_max, int32_t ( *isArrived)(float x,float y));
 

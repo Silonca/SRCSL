@@ -1,4 +1,4 @@
-#include "include/beep.h"
+﻿#include "include/beep.h"
 
 
 
@@ -6,12 +6,12 @@ static int freq_C[7] = {523,587,659,698,784,880,988};		//C调中音频率
 
 enum { SET, RESET};
 
-void player_set_analyse_func( uint8_t ( *analyse_func)(void *));
+//void player_set_analyse_func( uint8_t ( *analyse_func)(void *));
 
 
 //蜂鸣器初始化
 
-void beep_init( Beep *beep, void ( *freq_set_func)(uint32_t freq), uint32_t default_freq)
+void beep_init( Beep *beep, void ( *freq_set_func)(int32_t freq), uint32_t default_freq)
 {
 	beep->beep_state = BEEP_SWITCH_OFF;
 	beep->default_freq = default_freq;
@@ -73,7 +73,7 @@ void beep_switch(Beep *beep)
 
 
 //解析曲谱
-static void music_analysis( BeepMusic *beep_music)
+static uint8_t music_analysis( BeepMusic *beep_music)
 {
 	char *music = beep_music->player.list;
 	uint16_t *progress = &( beep_music->player.list_process);
@@ -83,15 +83,15 @@ static void music_analysis( BeepMusic *beep_music)
 	if( beep_music->dead_time > 0)
 	{
 		beep_music->player.processing_action = 0;
-		beep_music->player.processing_time = beep_music->dead_time * 1000;
-		return ;
+		beep_music->player.processing_time = (uint32_t)(beep_music->dead_time * 1000.0f);
+		return 0;
 	}
 	
 	beep_music->current_time = 1;
 	
 	//播放完毕
 	if( music[*progress] == '\0')
-		return ;
+		return PLAYER_LIST_END;
 	
 	//设置音调0的频率
 	if( music[*progress] == '0') beep_music->current_tone_freq = 0;
@@ -120,7 +120,9 @@ static void music_analysis( BeepMusic *beep_music)
 
 
 	beep_music->player.processing_action = beep_music->current_tone_freq;
-	beep_music->player.processing_time = beep_music->current_time * 1000;
+	beep_music->player.processing_time = (uint32_t)(beep_music->current_time * 1000.0f);
+
+	return 0;
 }
 
 
@@ -131,7 +133,7 @@ void music_init(BeepMusic *beep_music, Beep *beep, char *music)
 	beep_music->current_time = 0;
 	beep_music->dead_time = 0;
 
-	player_init(&(beep_music->player), PLAYER_MODE_DOWAIT, beep->freq_set_func, music);
+	player_init(&(beep_music->player), PLAYER_MODE_DOWAIT, music, beep->freq_set_func);
 	player_set_analyse_func(&(beep_music->player), music_analysis);
 }
 
@@ -140,7 +142,7 @@ void music_init(BeepMusic *beep_music, Beep *beep, char *music)
 
 
 //蜂鸣器音乐服务函数
-void beep_music_server(BeepMusic *beep_music)
+void music_server(BeepMusic *beep_music)
 {	
 	player_server( &(beep_music->player));
 }
@@ -200,7 +202,7 @@ int32_t music_get_repeat_time( BeepMusic *beep_music)
 	return player_get_repeat_time( &( beep_music->player));
 }
 
-void music_set_deadtime( BeepMusic *beep_music, int dead_time)
+void music_set_deadtime( BeepMusic *beep_music, float dead_time)
 {
 	beep_music->dead_time = dead_time;
 }

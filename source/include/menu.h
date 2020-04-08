@@ -49,7 +49,7 @@ typedef struct
 void menu_init( Menu *menu);
 
 int menu_set_path( Menu *menu, char *path);                        //set path to add item,if the path doesn't exist,establish it
-int menu_add( Menu *menu, char *child, char* (*func)());            //add child item
+int menu_add( Menu *menu, char *child, void (*func)(void));            //add child item
 
 //use menu
 void menu_back( Menu *menu);

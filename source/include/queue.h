@@ -16,7 +16,7 @@ typedef struct Queue
 
 
 void queue_init( Queue *queue);
-int queue_push( Queue *queue, QueueItem *item);
+void queue_push( Queue *queue, QueueItem *item);
 QueueItem* queue_pop( Queue *queue);
 
 #ifdef __cplusplus

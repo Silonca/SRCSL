@@ -55,7 +55,7 @@ typedef struct
 } StatePlayer;
 
 
-void player_init( StatePlayer *player, uint8_t mode, char *list, void ( *act_func)( uint8_t action_code));
+void player_init( StatePlayer *player, uint8_t mode, char *list, void ( *act_func)( int32_t action_code));
 
 void player_start( StatePlayer *player);                       //Start and Continue
 void player_pause( StatePlayer *player);                       //Pause
