@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-#include "../source/auxilliary/timer.h"
+#include "timer.h"
 
 enum {SET, RESET};
 
@@ -9,12 +9,12 @@ void act_func(uint8_t action_code)
     printf("action:%d\n", action_code);
 }
 
-int main(void)
+int test_timer_stateplayer(void)
 {
     uint32_t time = 0;
     StatePlayer player;
     char *list = "";
-    player_init( &player, list, act_func);
+    player_init( &player, PLAYER_MODE_DOWAIT, list, act_func);
     player_start( &player);
     while(1)
     {

@@ -12,7 +12,7 @@ typedef struct VectorItem
 
 typedef VectorItem Item;
 
-int main(void)
+int test_vector(void)
 {
     int times = 0,cnt=0;
     Item *t;

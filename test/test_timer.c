@@ -1,9 +1,9 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include "timer.h"
 
-#include "../source/auxilliary/timer.h"
 
-
-int main(void)
+int test_timer(void)
 {
     Timer timer,cnt;
     uint32_t set_time = 0;
@@ -11,17 +11,21 @@ int main(void)
 
     while(1)
     {
-        system("clr");
-        timer_updata();
+        //system("cls");
+        //timer_updata();
 
         printf("time_cnt:%d\n",timer_get(&cnt));
         printf("time set at: %d\n", set_time);
+		printf("timer.time:%d\n", timer.time);
         switch( getchar())
         {
             case 's':timer_set( &timer);set_time = timer_get( &cnt);break;
             case 'g':printf("timer_get:%d\n",timer_get( &timer));break;
-            default:printf("timer.time:%d\n",timer.time);
+			case 'u':timer_updata(); printf("updata\n"); break;
+			default:; 
         }
+		
+		getchar();
             
 
     }

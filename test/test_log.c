@@ -1,6 +1,7 @@
 #include <stdio.h>
+#include <stdlib.h>
 
-#include "../source/auxilliary/log.h"
+#include "log.h"
 
 
 void output( int8_t *msg)
@@ -8,7 +9,7 @@ void output( int8_t *msg)
     printf("---output : %s\n", msg);
 }
 
-int main(void)
+int test_log(void)
 {
     Log log;
     int log_cnt = 0;

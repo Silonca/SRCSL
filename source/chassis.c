@@ -1,5 +1,5 @@
 #include "include/chassis.h"
-
+#include <math.h>
 
 void chassis_init( Chassis *chassis, Motor *motor, uint8_t motor_num, Servo *servo, uint8_t servo_num)
 {
@@ -89,13 +89,13 @@ void chassis_motor_init( Chassis *chassis, uint8_t motor_code, uint32_t encoder_
 
 void chassis_motor_init_speed_pid( Chassis *chassis, uint8_t motor_code, uint8_t mode, float max_out, float max_iout, float p, float i, float d)
 {
-    motor_speed_pid_init( &(chassis->motor[ motor_code]), mode, max_out, max_iout, p, i, d);
+    pid_init( &(chassis->motor[ motor_code].speed_pid), mode, max_out, max_iout, p, i, d);
 }
 
 
 void chassis_motor_init_position_pid( Chassis *chassis, uint8_t motor_code, uint8_t mode, float max_out, float max_iout, float p, float i, float d)
 {
-    motor_position_pid_init( &(chassis->motor[ motor_code]), mode, max_out, max_iout, p, i, d);
+    pid_init( &(chassis->motor[ motor_code].position_pid), mode, max_out, max_iout, p, i, d);
 }
 
 
@@ -268,7 +268,7 @@ void chassis_ctrl_calc_4w_mecanum_headless( Chassis *chassis, float vx, float vy
 
 void chassis_ctrl_calc_4w_omni_headless( Chassis *chassis, float vx, float vy, float vyaw, float angle)
 {
-    chassis_4w_mecanum_headless_ctrl( chassis, vx, vy, vyaw, angle);
+	chassis_ctrl_calc_4w_mecanum_headless( chassis, vx, vy, vyaw, angle);
 }
 
 

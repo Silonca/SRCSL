@@ -4,7 +4,7 @@
 #include <stdlib.h>
 
 
-void vector( Vector *vector)
+void vector_init( Vector *vector)
 {
     vector->item_space = ( VectorItem**)malloc( sizeof( VectorItem*) * (uint32_t)(VECTOR_INITIAL_CAPACITY));
     vector->capacity = VECTOR_INITIAL_CAPACITY;

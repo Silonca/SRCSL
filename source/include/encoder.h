@@ -17,7 +17,7 @@ typedef struct
     int32_t angle_sum;
     int32_t rounds;  
     int32_t d_value;               //diffence between two angle    
-    uint32_t range;      
+    int32_t range;      
 
 } Encoder;
 

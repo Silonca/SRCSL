@@ -1,5 +1,6 @@
 #include "include/pid.h"
 
+#define ABS(X)	( ( (X) > 0) ? ( X) : ( -(X)))			
 
 
 #define LimitMaxAbs(input, max)   \

@@ -72,18 +72,6 @@ void beep_switch(Beep *beep)
 
 
 
-//设置要播放的曲谱
-void music_init(BeepMusic *beep_music, Beep *beep, char *music)
-{
-	beep_music->current_tone_freq	= 0;
-	beep_music->current_time 		= 0;
-	beep_music->dead_time			= 0;
-
-	player_init( &(beep_music->player), PLAYER_MODE_DOWAIT, beep->freq_set_func, music);
-	player_set_analyse_func( &(beep_music->player), music_analysis);
-}
-
-
 //解析曲谱
 static void music_analysis( BeepMusic *beep_music)
 {
@@ -125,7 +113,7 @@ static void music_analysis( BeepMusic *beep_music)
 			case '_': beep_music->current_time 			/=2.0f;	break;	    //时间/2
 			case '.': beep_music->current_time 			+=0.5f;	break;	    //时间+0.5s
 			//error
-			default:
+			default:;
 		}
 
 	}
@@ -134,6 +122,20 @@ static void music_analysis( BeepMusic *beep_music)
 	beep_music->player.processing_action = beep_music->current_tone_freq;
 	beep_music->player.processing_time = beep_music->current_time * 1000;
 }
+
+
+//设置要播放的曲谱
+void music_init(BeepMusic *beep_music, Beep *beep, char *music)
+{
+	beep_music->current_tone_freq = 0;
+	beep_music->current_time = 0;
+	beep_music->dead_time = 0;
+
+	player_init(&(beep_music->player), PLAYER_MODE_DOWAIT, beep->freq_set_func, music);
+	player_set_analyse_func(&(beep_music->player), music_analysis);
+}
+
+
 
 
 
