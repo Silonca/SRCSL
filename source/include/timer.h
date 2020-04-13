@@ -24,6 +24,25 @@ uint32_t timer_get( Timer *timer);                                      //Run th
 //----------------------------------------------------------
 
 
+
+#define RAMP_UP		1			
+#define RAMP_DOWN	2			
+
+
+typedef struct
+{
+	Timer timer;
+	float ramp_out;
+} Ramp;
+
+
+void ramp_set(Ramp *ramp);										//Run this to start the ramp
+float ramp_calc(Ramp *ramp, uint32_t time, uint8_t dir);		//Run this to get the ramp value( the unit of time is ms)
+
+
+
+//-----------------------------------------------------------
+
 #define PLAYER_REPEAT_COUNTLESS -1
 #define PLAYER_LIST_END -1
 #define PLAYER_LIST_FORMAT_ERROR -2

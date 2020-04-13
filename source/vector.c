@@ -35,7 +35,7 @@ int vector_insert( Vector *vector, VectorItem *item, uint32_t index)
             return -2;
     }
     
-    for( temp = vector->size; temp > index; --temp)
+    for( temp = vector->size - 1; temp >= index; --temp)
     {
         vector->item_space[temp] = vector->item_space[temp-1];
     }

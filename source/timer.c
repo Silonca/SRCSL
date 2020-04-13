@@ -30,6 +30,56 @@ uint32_t timer_get( Timer *timer)
 
 //------------------------------------------------------------
 
+
+
+void ramp_set(Ramp *ramp)
+{
+	timer_set(&(ramp->timer));
+}
+
+
+
+
+float ramp_calc(Ramp *ramp, uint32_t time, uint8_t dir)
+{
+	uint32_t diff;
+
+	diff = timer_get(&(ramp->timer));
+	timer_set(&(ramp->timer));
+
+	switch (dir)
+	{
+	case RAMP_UP:
+		ramp->ramp_out += (float)diff / (float)time;
+		break;
+	case RAMP_DOWN:
+		ramp->ramp_out -= (float)diff / (float)time;
+		break;
+	}
+
+
+	if (ramp->ramp_out > 1.0f)
+	{
+		ramp->ramp_out = 1.0f;
+		return 1.0f;
+	}
+	if (ramp->ramp_out < 0.0f)
+	{
+		ramp->ramp_out = 0.0f;
+		return 0.0f;
+	}
+
+	return ramp->ramp_out;
+
+
+}
+
+
+
+
+
+//------------------------------------------------------------
+
 void player_init( StatePlayer *player, uint8_t mode, char *list, void ( *act_func)( int32_t action_code))
 {
     player->list = list;

@@ -15,7 +15,7 @@ typedef struct VectorItem VectorItem;
 typedef struct Vector
 {
     VectorItem **item_space;
-    uint32_t cnt;
+
     uint32_t size;
     uint32_t capacity;
 } Vector;
