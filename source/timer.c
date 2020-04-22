@@ -6,10 +6,10 @@ static volatile uint32_t timer_cnt = 0;
 
 enum { SET, RESET};
 
-uint8_t player_list_analyse( StatePlayer *player);
+int player_list_analyse( StatePlayer *player);
 
 
-void timer_updata()
+void timer_updata(void)
 {
     ++timer_cnt;
 }
@@ -150,7 +150,7 @@ void player_jump_time( StatePlayer *player, uint32_t time)
     while( time_sum < time);
 }
 
-uint8_t player_list_analyse( StatePlayer *player)
+int player_list_analyse( StatePlayer *player)
 {
     int32_t num_1 = 0, num_2 = 0;
 
@@ -304,7 +304,7 @@ void player_set_transition( StatePlayer *player, uint8_t flag)
 }
 
 
-void player_set_analyse_func( StatePlayer *player, uint8_t ( *analyse_func)(void *))
+void player_set_analyse_func( StatePlayer *player, int ( *analyse_func)(void *))
 {
     player->analyse_func = analyse_func;
 }

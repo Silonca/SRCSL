@@ -1,5 +1,5 @@
-#ifndef PID_H_INCLUDED
-#define PID_H_INCLUDED
+#ifndef SRCSL_PID_H_INCLUDED
+#define SRCSL_PID_H_INCLUDED
 
 #ifdef __cplusplus
 extern "C"{

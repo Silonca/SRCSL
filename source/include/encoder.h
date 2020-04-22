@@ -1,5 +1,5 @@
-#ifndef ENCODER_H_INCLUDED
-#define ENCODER_H_INCLUDED
+#ifndef SRCSL_ENCODER_H_INCLUDED
+#define SRCSL_ENCODER_H_INCLUDED
 
 #ifdef __cplusplus
 extern "C"{
@@ -13,7 +13,7 @@ typedef struct
 {
     uint32_t enocder_type;
 
-    uint32_t angle_abs;             //for incremental encoder,it's relative to origin position
+    int32_t angle_abs;             //for incremental encoder,it's relative to origin position
     int32_t angle_sum;
     int32_t rounds;  
     int32_t d_value;               //diffence between two angle    

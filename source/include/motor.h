@@ -1,5 +1,5 @@
-#ifndef MOTOR_H_INCLUDED
-#define MOTOR_H_INCLUDED
+#ifndef SRCSL_MOTOR_H_INCLUDED
+#define SRCSL_MOTOR_H_INCLUDED
 
 #ifdef __cplusplus
 extern "C"{

@@ -1,5 +1,5 @@
-#ifndef CHASSIS_H_INCLUDED
-#define CHASSIS_H_INCLUDED
+#ifndef SRCSL_CHASSIS_H_INCLUDED
+#define SRCSL_CHASSIS_H_INCLUDED
 
 #ifdef __cplusplus
 extern "C"{

@@ -1,5 +1,5 @@
-#ifndef STACK_H_INCLUDED
-#define STACK_H_INCLUDED
+#ifndef SRCSL_STACK_H_INCLUDED
+#define SRCSL_STACK_H_INCLUDED
 
 
 #ifdef __cplusplus

@@ -1,5 +1,5 @@
-#ifndef MENU_H_INCLUDED
-#define MUNE_H_INCLUDED
+#ifndef SRCSL_MENU_H_INCLUDED
+#define SRCSL_MUNE_H_INCLUDED
 
 #ifdef __cplusplus
 extern "C"{

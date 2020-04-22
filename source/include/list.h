@@ -1,5 +1,5 @@
-#ifndef LIST_H_INCLUDED
-#define LIST_H_INCLUDED
+#ifndef SRCSL_LIST_H_INCLUDED
+#define SRCSL_LIST_H_INCLUDED
 
 #ifdef __cplusplus
 extern "C"{

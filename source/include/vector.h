@@ -1,5 +1,5 @@
-#ifndef VECTOR_H_INCLUDED
-#define VEVTOR_H_INCLUDED
+#ifndef SRCSL_VECTOR_H_INCLUDED
+#define SRCSL_VEVTOR_H_INCLUDED
 
 #ifdef __cplusplus
 extern "C"{

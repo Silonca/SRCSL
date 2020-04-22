@@ -1,5 +1,5 @@
-#ifndef QUEUE_H_INCULDED
-#define QUEUE_H_INCLUDED
+#ifndef SRCSL_QUEUE_H_INCULDED
+#define SRCSL_QUEUE_H_INCLUDED
 
 #ifdef __cplusplus
 extern "C"{

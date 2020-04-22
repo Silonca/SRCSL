@@ -1,5 +1,5 @@
-﻿#ifndef BEEP_H_INCLUDED
-#define BEEP_H_INCLUDED
+﻿#ifndef SRCSL_BEEP_H_INCLUDED
+#define SRCSL_BEEP_H_INCLUDED
 
 #ifdef __cplusplus
 extern "C"{

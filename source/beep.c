@@ -73,7 +73,7 @@ void beep_switch(Beep *beep)
 
 
 //解析曲谱
-static uint8_t music_analysis( BeepMusic *beep_music)
+static int music_analysis( BeepMusic *beep_music)
 {
 	char *music = beep_music->player.list;
 	uint16_t *progress = &( beep_music->player.list_process);

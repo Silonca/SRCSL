@@ -1,5 +1,5 @@
-#ifndef TIMER_H_INCLUDED
-#define TIMER_H_INCLUDED
+#ifndef SRCSL_TIMER_H_INCLUDED
+#define SRCSL_TIMER_H_INCLUDED
 
 #ifdef __cplusplus
 extern "C"{
@@ -16,7 +16,7 @@ typedef struct
 } Timer;
 
 
-void timer_updata();                                                    //Please run this function in 1000Hz
+void timer_updata(void);                                                    //Please run this function in 1000Hz
 void timer_set( Timer *timer);                                          //Run this function to start a timer
 uint32_t timer_get( Timer *timer);                                      //Run this function to get the time from Timer_Set() till now
 
@@ -69,7 +69,7 @@ typedef struct
     uint8_t transition_flag;
     uint32_t processing_action_last;
 
-    uint8_t ( *analyse_func)( void *);
+    int ( *analyse_func)( void *);
     void ( *act_func)(int32_t state_code);     //Must be a non-blocking function
 } StatePlayer;
 

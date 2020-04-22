@@ -1,5 +1,5 @@
-#ifndef KEY_H_INCLUDED
-#define KEY_H_INCLUDED
+#ifndef SRCSL_KEY_H_INCLUDED
+#define SRCSL_KEY_H_INCLUDED
 
 
 #ifdef __cplusplus

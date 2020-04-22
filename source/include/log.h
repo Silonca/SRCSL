@@ -1,5 +1,5 @@
-#ifndef LOG_H_INCLUDED
-#define LOG_H_INCLUDED
+#ifndef SRCSL_LOG_H_INCLUDED
+#define SRCSL_LOG_H_INCLUDED
 
 #ifdef __cplusplus
 extern "C"{

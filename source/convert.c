@@ -4,15 +4,15 @@
 
 #include <math.h>
 
-#include "include/convert_coordinates.h"
+#include "include/convert.h"
 
 
 
 
 
-Cartesian_Coordinates convert_P2C( Polar_Coordinates polar)
+Cartesian convert_P2C( Polar polar)
 {
-    Cartesian_Coordinates temp;
+    Cartesian temp;
 
     temp.x = polar.distance * cosf( polar.angle);
     temp.y = polar.distance * sinf( polar.angle);
@@ -21,9 +21,9 @@ Cartesian_Coordinates convert_P2C( Polar_Coordinates polar)
 }
 
 
-Polar_Coordinates convert_C2P( Cartesian_Coordinates cartesian)
+Polar convert_C2P( Cartesian cartesian)
 {
-    Polar_Coordinates temp;
+    Polar temp;
 
     temp.angle = atan2f( cartesian.y, cartesian.x);
     temp.distance = sqrtf( cartesian.x * cartesian.x + cartesian.y * cartesian.y);
@@ -32,9 +32,9 @@ Polar_Coordinates convert_C2P( Cartesian_Coordinates cartesian)
 }
 
 
-Polar_Coordinates vector_P2P( Polar_Coordinates polar_begin, Polar_Coordinates polar_end)
+Polar vector_P2P( Polar polar_begin, Polar polar_end)
 {
-    Polar_Coordinates temp;
+    Polar temp;
 
     temp.angle = polar_end.angle - polar_begin.angle;
     while( temp.angle > M_PI_2) temp.angle -= (float)M_PI;
@@ -46,9 +46,9 @@ Polar_Coordinates vector_P2P( Polar_Coordinates polar_begin, Polar_Coordinates p
 
 
 
-Cartesian_Coordinates vector_C2C( Cartesian_Coordinates cartesian_begin, Cartesian_Coordinates cartesian_end)
+Cartesian vector_C2C( Cartesian cartesian_begin, Cartesian cartesian_end)
 {
-    Cartesian_Coordinates temp;
+    Cartesian temp;
 
     temp.x = cartesian_end.x - cartesian_begin.x;
     temp.y = cartesian_end.y - cartesian_begin.y;

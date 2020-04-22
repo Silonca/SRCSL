@@ -109,6 +109,9 @@ void chassis_ctrl_calc_2w( Chassis *chassis, float vx, float vyaw)
     float speed[2];
     int a;
 
+	if (chassis->motor_num < 2)
+		return;
+
     speed[ WHEEL_2W_LEFT] = -(vx - vyaw);
     speed[ WHEEL_2W_RIGHT] = vx + vyaw;
     
@@ -122,6 +125,9 @@ void chassis_ctrl_calc_3w_omni( Chassis *chassis, uint8_t heading_mode, float vx
 {
 	float speed[3] = {0};
     int a;
+
+	if (chassis->motor_num < 3)
+		return;
 
     //untested !!!
     if( heading_mode == WHEEL_3W_HEADING_MOTOR)
@@ -151,6 +157,9 @@ void chassis_ctrl_calc_3w_omni_headless( Chassis *chassis, uint8_t heading_mode,
 	float speed[3] = {0};
     float v_x,v_y;
     int a;
+
+	if (chassis->motor_num < 3)
+		return;
 
     v_x = vx * cosf( angle) - vy * sinf( -angle);
     v_y = -vx * sinf( angle) + vy * cosf( -angle);
@@ -187,6 +196,9 @@ void chassis_ctrl_calc_4w_regular( Chassis *chassis, float vx, float vyaw)
     float speed[4];
     int a;
 
+	if (chassis->motor_num < 4)
+		return;
+
     speed[ WHEEL_4W_LF] = -(vx - vyaw);
     speed[ WHEEL_4W_LR] = -(vx - vyaw);
     speed[ WHEEL_4W_RF] = vx + vyaw;
@@ -203,6 +215,9 @@ void chassis_ctrl_calc_4w_mecanum( Chassis *chassis, float vx, float vy, float v
 {
     float speed[4];
     int a;
+
+	if (chassis->motor_num < 4)
+		return;
 
     speed[ WHEEL_4W_LF] = vy + vx + vyaw;
     speed[ WHEEL_4W_LR] = -(vy - vx - vyaw);
@@ -229,6 +244,9 @@ void chassis_ctrl_calc_4w_mecanum_off_center( Chassis *chassis, float vx, float 
     float speed[4];
     int a;
 
+	if (chassis->motor_num < 4)
+		return;
+
     if( width_rate > 1 || width_rate < 0 || length_rate > 1 || length_rate < 0)
         return ;
 
@@ -248,6 +266,9 @@ void chassis_ctrl_calc_4w_mecanum_headless( Chassis *chassis, float vx, float vy
     float speed[4];
     float v_x,v_y;
     int a;
+
+	if (chassis->motor_num < 4)
+		return;
 
     v_x = vx * cosf( angle) - vy * sinf( -angle);
     v_y = -vx * sinf( angle) + vy * cosf( -angle);
