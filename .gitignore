@@ -1,4 +1,5 @@
 /.vscode
-/useless_files
 /.vs
 /srcsl_test
+/doc
+.gitignore

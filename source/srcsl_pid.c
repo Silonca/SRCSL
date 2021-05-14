@@ -1,49 +1,48 @@
-#include "include/pid.h"
+/**
+* @file srcsl_pid.c
+* @brief pid和模糊pid自整定功能
+* @author Silonca
+*/
+
+#include "include/srcsl_pid.h"
 
 #define ABS(X)	( ( (X) > 0) ? ( X) : ( -(X)))			
 
-
-#define LimitMaxAbs(input, max)   \
-    {                          \
-        if (input > max)       \
-        {                      \
-            input = max;       \
-        }                      \
-        else if (input < -max) \
-        {                      \
-            input = -max;      \
-        }                      \
-    }
+//限制绝对值的最大值
+#define LimitMaxAbs(input, max)		\
+		{							\
+			if (input > max)		\
+				input = max;		\
+			else if (input < -max)	\
+				input = -max;		\
+		}
 
 
-void pid_init( PID *pid, uint8_t mode, float max_out, float max_iout, float p, float i, float d)
+void srcsl_pid_init( SrcslPID *pid, uint8_t mode, float max_out, float max_iout, float p, float i, float d)
 {
 	pid->max_iout = max_iout;
 	pid->max_out = max_out;
-	pid->pid_mode = mode;
+	pid->srcsl_pid_mode = mode;
 	pid->deadband = 0;
 	pid->max_error = 0;	
 
+	srcsl_pid_reset(pid, p, i, d);
+}
+
+
+
+
+void srcsl_pid_reset( SrcslPID *pid, float p, float i, float d)
+{
 	pid->p = p;
 	pid->i = i;
 	pid->d = d;
 	
-	pid_clear(pid);
+	srcsl_pid_clear(pid);	
 }
 
 
-
-
-void pid_reset( PID *pid, float kp, float ki, float kd)
-{
-	pid->p = kp;
-	pid->i = ki;
-	pid->d = kd;
-	
-	pid_clear(pid);	
-}
-
-void pid_clear( PID *pid)
+void srcsl_pid_clear( SrcslPID *pid)
 {
 	pid->pout = 0;
 	pid->iout = 0;
@@ -60,8 +59,9 @@ void pid_clear( PID *pid)
 
 
 
-float pid_calc( PID *pid, float get, float set)
+float srcsl_pid_calc( SrcslPID *pid, float get, float set)
 {
+	//局部枚举
 	enum
 	{
 		LLAST = 0,
@@ -69,24 +69,21 @@ float pid_calc( PID *pid, float get, float set)
 		NOW = 2,
 	};
 
-	if ( pid == NULL)
-	{
-		return 0;
-	}
 
 	pid->get = get;
 	pid->set = set;
-
 	pid->error[NOW] = set - get;
 	
+	//检测差值是否合理
 	if( pid->max_error != 0 && ABS( pid->error[NOW]) > pid->max_error)
 		return 0;
 
+	//检测是否处于pid死区
 	if( pid->deadband != 0 && ABS( pid->error[NOW]) < pid->deadband)
 		return 0;
 	
-
-	if( pid->pid_mode == PID_POSITION)
+	//位置式pid
+	if( pid->srcsl_pid_mode == SRCSL_PID_POSITION)
 	{
 		pid->pout = pid->p * pid->error[NOW];
         pid->iout += pid->i * pid->error[NOW];
@@ -95,7 +92,8 @@ float pid_calc( PID *pid, float get, float set)
         pid->out = pid->pout + pid->iout + pid->dout;
         LimitMaxAbs(pid->out, pid->max_out);	
 	}
-	else if(pid->pid_mode == PID_DELTA)
+	//增量式pid
+	else if(pid->srcsl_pid_mode == SRCSL_PID_DELTA)
     {
         pid->pout = pid->p * (pid->error[NOW] - pid->error[LAST]);
         pid->iout = pid->i * pid->error[NOW];
@@ -105,6 +103,7 @@ float pid_calc( PID *pid, float get, float set)
         LimitMaxAbs(pid->out, pid->max_out);
     }
 
+	//记录历史数据
 	pid->error[LLAST] = pid->error[LAST];
     pid->error[LAST]  = pid->error[NOW];
 
@@ -113,31 +112,24 @@ float pid_calc( PID *pid, float get, float set)
 
 
 
-void pid_set_maxerror( PID *pid, float max_error)             
+void srcsl_pid_set_maxerror( SrcslPID *pid, float max_error)             
 {
-	if( pid == NULL)
-		return ;
-
 	pid->max_error = max_error;
 }
 
-void pid_set_deadband( PID *pid, float deadband)
+
+
+void srcsl_pid_set_deadband( SrcslPID *pid, float deadband)
 {
-	if( pid == NULL)
-		return ;
-	
 	pid->deadband = deadband;
 }
 
 
-void pid_clone( PID *des, PID *src)
+
+void srcsl_pid_clone( SrcslPID *des, SrcslPID *src)
 {
-	pid_init( des, src->pid_mode, src->max_out, src->max_iout, src->p, src->i, src->d);
+	srcsl_pid_init( des, src->srcsl_pid_mode, src->max_out, src->max_iout, src->p, src->i, src->d);
 	
 	des->max_error = src->max_error;
 	des->deadband = src->deadband;
-	
-
 }
-
-
