@@ -7,6 +7,7 @@
 
 #include <stdlib.h>
 
+//内存管理功能初始化
 void srcsl_memmang_init(SrcslMemMang * m, uint8_t * base, unsigned int size)
 {
 	m->base = base;
@@ -18,7 +19,7 @@ void srcsl_memmang_init(SrcslMemMang * m, uint8_t * base, unsigned int size)
 	m->consumption = 0;
 }
 
-
+//内存分配函数，用于替代malloc
 void * srcsl_malloc(SrcslMemMang * m, unsigned int size)
 {
 	uint8_t *address;
@@ -91,7 +92,7 @@ void * srcsl_malloc(SrcslMemMang * m, unsigned int size)
 }
 
 
-
+//内存重分配函数，实现容量更改，用于替代realloc
 void * srcsl_realloc(SrcslMemMang * m, void * pre, unsigned int size)
 {
 	uint8_t *pr = (uint8_t*)pre - sizeof(SrcslMemBlock);
@@ -146,7 +147,7 @@ void * srcsl_realloc(SrcslMemMang * m, void * pre, unsigned int size)
 }
 
 
-
+//内存释放函数，用于替代free
 void srcsl_free(SrcslMemMang * m, void * p)
 {
 	SrcslMemBlock *temp;
@@ -191,7 +192,7 @@ void srcsl_free(SrcslMemMang * m, void * p)
 
 }
 
-
+//获取内存空间使用率
 float srcsl_get_usage(SrcslMemMang * m)
 {
 	//非指定空间，无法得知使用情况

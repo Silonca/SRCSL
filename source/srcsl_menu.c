@@ -20,6 +20,7 @@ static void menu_display_init(SrcslMenu *menu) {
 	menu->display_selection = menu->display_first;
 }
 
+//菜单控制初始化
 void srcsl_menu_ctrl_init(SrcslMenu * menu, uint8_t rows_num)
 {
 	menu->current_layer = menu->root;
@@ -27,6 +28,7 @@ void srcsl_menu_ctrl_init(SrcslMenu * menu, uint8_t rows_num)
 	menu_display_init(menu);
 }
 
+//初始化菜单层
 void srcsl_menu_layer_init(SrcslMenuLayer * layer, SrcslMenuNode * nodes, uint8_t nodes_nums)
 {
 	layer->parent = NULL;
@@ -34,6 +36,7 @@ void srcsl_menu_layer_init(SrcslMenuLayer * layer, SrcslMenuNode * nodes, uint8_
 	layer->nodes_nums = nodes_nums;
 }
 
+//编辑层中的节点
 int srcsl_menu_layer_edit(SrcslMenuLayer * layer, int node_index, char * node_name, void(*func)(void))
 {
 	if (node_index >= layer->nodes_nums) {
@@ -45,27 +48,27 @@ int srcsl_menu_layer_edit(SrcslMenuLayer * layer, int node_index, char * node_na
 	return 0;
 }
 
-
+//连接两个菜单层
 void srcsl_menu_layer_link(SrcslMenuLayer * child, SrcslMenuLayer * parent, int node_index) {
 	parent->nodes[node_index].next_layer = child;
 	child->parent = parent;
 }
 
-
+//菜单回到根部
 void srcsl_menu_home(SrcslMenu * menu)
 {
 	menu->current_layer = menu->root;
 	menu_display_init(menu);
 }
 
-
+//菜单回到上一层
 void srcsl_menu_back(SrcslMenu * menu)
 {
 	menu->current_layer = menu->current_layer->parent;
 	menu_display_init(menu);
 }
 
-
+//菜单确认（进入下一层或执行功能）
 void srcsl_menu_confirm(SrcslMenu * menu)
 {
 	if (menu->current_layer->nodes[menu->display_selection].next_layer != NULL) {
@@ -78,7 +81,7 @@ void srcsl_menu_confirm(SrcslMenu * menu)
 	}
 }
 
-
+//上移光标
 void srcsl_menu_up(SrcslMenu * menu)
 {
 	//光标移动后在显示区域内
@@ -103,7 +106,7 @@ void srcsl_menu_up(SrcslMenu * menu)
 	}
 }
 
-
+//下移光标
 void srcsl_menu_down(SrcslMenu * menu)
 {
 	//光标移动后在显示区域内

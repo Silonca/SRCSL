@@ -2,7 +2,7 @@
 #define SRCSL_SRCSLSYS_H_INCLUDED
 
 #include <stdint.h>
-//stdint.h为C99引入，如果没有，请自行编写以下注释部分内容，并将上一行去掉
+//stdint.h为C99引入，如果缺少该文件，请自行编写以下注释部分内容，并将上一行去掉
 /*
 typedef signed char        int8_t;
 typedef short              int16_t;

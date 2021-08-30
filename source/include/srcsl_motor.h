@@ -49,7 +49,7 @@ typedef struct
 
 
 /**
-* @brief 电机步进控制
+* @brief 电机最大步进限制
 * @attention 应当将计算结果付给src
 * @par 例：
 * @code
@@ -97,7 +97,7 @@ int32_t srcsl_motor_speed_ctrl_calc( SrcslMotor *motor, float speed);
 
 
 /**
-* @brief 电机位置（绝对角度）控制计算函数（会就近归位，不受行程限制）
+* @brief 电机位置（绝对角度）控制计算函数（会就近归位，不受零点影响）
 * @param *motor		电机模块实例的指针
 * @param position	电机的目标位置
 * @return 双环pid输出值

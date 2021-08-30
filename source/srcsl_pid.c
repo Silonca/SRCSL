@@ -17,7 +17,7 @@
 				input = -max;		\
 		}
 
-
+//pid模块初始化
 void srcsl_pid_init( SrcslPID *pid, uint8_t mode, float max_out, float max_iout, float p, float i, float d)
 {
 	pid->max_iout = max_iout;
@@ -29,9 +29,7 @@ void srcsl_pid_init( SrcslPID *pid, uint8_t mode, float max_out, float max_iout,
 	srcsl_pid_reset(pid, p, i, d);
 }
 
-
-
-
+//重新设定pid参数
 void srcsl_pid_reset( SrcslPID *pid, float p, float i, float d)
 {
 	pid->p = p;
@@ -41,7 +39,7 @@ void srcsl_pid_reset( SrcslPID *pid, float p, float i, float d)
 	srcsl_pid_clear(pid);	
 }
 
-
+//将pid实例的计算结果清空
 void srcsl_pid_clear( SrcslPID *pid)
 {
 	pid->pout = 0;
@@ -58,7 +56,7 @@ void srcsl_pid_clear( SrcslPID *pid)
 }
 
 
-
+//pid计算
 float srcsl_pid_calc( SrcslPID *pid, float get, float set)
 {
 	//局部枚举
@@ -110,22 +108,21 @@ float srcsl_pid_calc( SrcslPID *pid, float get, float set)
     return pid->out;
 }
 
-
-
+//设置允许的最大差值
 void srcsl_pid_set_maxerror( SrcslPID *pid, float max_error)             
 {
 	pid->max_error = max_error;
 }
 
 
-
+//设置pid死区时间
 void srcsl_pid_set_deadband( SrcslPID *pid, float deadband)
 {
 	pid->deadband = deadband;
 }
 
 
-
+//克隆pid（将参数复制给另一个pid实例）
 void srcsl_pid_clone( SrcslPID *des, SrcslPID *src)
 {
 	srcsl_pid_init( des, src->srcsl_pid_mode, src->max_out, src->max_iout, src->p, src->i, src->d);

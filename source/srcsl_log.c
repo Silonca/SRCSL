@@ -10,14 +10,14 @@
 #include <string.h>
 
 
-
+//log初始化
 void srcsl_log_init( SrcslLog *log, void(*output_func)(int8_t *msg))
 {
 	log->output_func = output_func;
 }
 
 
-
+//用自定义的输出函数将内容输出
 void srcsl_log_write( SrcslLog *log, int8_t *fmt, ...)
 {
     va_list list;

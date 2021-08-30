@@ -8,7 +8,7 @@
 
 static const float sqrt3 = 1.732050807568877f;
 
-
+//底盘模块初始化
 void srcsl_chassis_init( SrcslChassis *chassis, SrcslMotor *motor, uint8_t motor_num, SrcslServo *servo, uint8_t servo_num)
 {
     chassis->v_x_max[SRCSL_CHASSIS_FORWARD] = 0;
@@ -24,7 +24,7 @@ void srcsl_chassis_init( SrcslChassis *chassis, SrcslMotor *motor, uint8_t motor
     chassis->servo_num = servo_num;
 }
 
-
+//设置底盘最大速度
 void srcsl_chassis_set_v_max( SrcslChassis *chassis, float v_x_max, float v_y_max, float v_yaw_max)
 {
     chassis->v_x_max[SRCSL_CHASSIS_FORWARD] = v_x_max;
@@ -38,7 +38,7 @@ void srcsl_chassis_set_v_max( SrcslChassis *chassis, float v_x_max, float v_y_ma
 
 
 
-
+//设置底盘最大逆向速度
 void srcsl_chassis_set_v_max_reverse( SrcslChassis *chassis, float v_x_max, float v_y_max, float v_yaw_max)        
 {
     chassis->v_x_max[SRCSL_CHASSIS_REVERSE] = v_x_max;
@@ -48,7 +48,7 @@ void srcsl_chassis_set_v_max_reverse( SrcslChassis *chassis, float v_x_max, floa
 
 
 
-
+//二轮底盘驱动
 void srcsl_chassis_ctrl_calc_2w( SrcslChassis *chassis, float vx, float vyaw)
 {
     float speed[2];
@@ -65,7 +65,7 @@ void srcsl_chassis_ctrl_calc_2w( SrcslChassis *chassis, float vx, float vyaw)
 
 
 
-
+//三全向轮底盘
 void srcsl_chassis_ctrl_calc_3w_omni( SrcslChassis *chassis, uint8_t heading_mode, float vx, float vy, float vyaw)
 {
 	float speed[3] = {0};
@@ -76,8 +76,8 @@ void srcsl_chassis_ctrl_calc_3w_omni( SrcslChassis *chassis, uint8_t heading_mod
     if( heading_mode == SRCSL_WHEEL_3W_HEADING_MOTOR)
     {
         speed[ SRCSL_WHEEL_3W_ONE]    = vy + vyaw;
-        speed[ SRCSL_WHEEL_3W_TWO]    = -( 0.5f * vy - sqrt3 / 2 * vx - vyaw);
-        speed[ SRCSL_WHEEL_3W_THREE]  = ( 0.5f * vy - sqrt3 / 2 * vx + vyaw);        
+        speed[ SRCSL_WHEEL_3W_TWO]    = -( 0.5f * vy - sqrt3 / 2.0f * vx - vyaw);
+        speed[ SRCSL_WHEEL_3W_THREE]  = ( 0.5f * vy - sqrt3 / 2.0f * vx + vyaw);        
     }
 	//实际为另一个模式的反向
     else if( heading_mode == SRCSL_WHEEL_3W_HEADING_BETWEEN_MOTOR)
@@ -96,7 +96,7 @@ void srcsl_chassis_ctrl_calc_3w_omni( SrcslChassis *chassis, uint8_t heading_mod
 }
 
 
-
+//三全向轮底盘（无头模式）
 void srcsl_chassis_ctrl_calc_3w_omni_headless( SrcslChassis *chassis, uint8_t heading_mode, float vx, float vy, float vyaw, float angle)
 {
     float v_x,v_y;
@@ -109,7 +109,7 @@ void srcsl_chassis_ctrl_calc_3w_omni_headless( SrcslChassis *chassis, uint8_t he
 
 
 
-
+//四轮底盘
 void srcsl_chassis_ctrl_calc_4w_regular( SrcslChassis *chassis, float vx, float vyaw)
 {
     float speed[4];
@@ -129,7 +129,7 @@ void srcsl_chassis_ctrl_calc_4w_regular( SrcslChassis *chassis, float vx, float 
 
 
 
-
+//四轮麦克纳姆轮底盘
 void srcsl_chassis_ctrl_calc_4w_mecanum( SrcslChassis *chassis, float vx, float vy, float vyaw)
 {
     float speed[4];
@@ -148,7 +148,7 @@ void srcsl_chassis_ctrl_calc_4w_mecanum( SrcslChassis *chassis, float vx, float 
 
 
 
-
+//四轮麦克纳姆轮底盘（离心旋转）
 void srcsl_chassis_ctrl_calc_4w_mecanum_off_center( SrcslChassis *chassis, float vx, float vy, float vyaw, float width_rate, float length_rate)
 {
     float speed[4];
@@ -171,7 +171,7 @@ void srcsl_chassis_ctrl_calc_4w_mecanum_off_center( SrcslChassis *chassis, float
 
 
 
-
+//四轮麦克纳姆轮底盘（无头模式）
 void srcsl_chassis_ctrl_calc_4w_mecanum_headless( SrcslChassis *chassis, float vx, float vy, float vyaw, float angle)
 {
     float speed[4];
@@ -198,7 +198,7 @@ void srcsl_chassis_ctrl_calc_4w_mecanum_headless( SrcslChassis *chassis, float v
 
 
 
-
+//汽车类底盘控制
 void srcsl_chassis_ctrl_calc_car( SrcslChassis *chassis, float v, int32_t caster_angle)
 {
     srcsl_motor_speed_ctrl_calc( &( chassis->motor[0]), v);

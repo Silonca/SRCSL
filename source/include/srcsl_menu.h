@@ -10,7 +10,7 @@ extern "C"{
 struct SrcslMenuNode;
 struct SrcslMenuLayer;
 
-///menu节点，相当于文件的概念，当节点是子层时，它相当于逻辑中介，表明子层的名字和下一层
+///menu节点，相当于文件的概念，当节点是子层时，它相当于中介，表明子层的名字和下一层
 typedef struct SrcslMenuNode
 {
 	char *name;								//!< 节点名字
@@ -109,8 +109,6 @@ void srcsl_menu_up( SrcslMenu *menu);
 */
 void srcsl_menu_down( SrcslMenu *menu);		
 
-
-//char* menu_out( Menu *menu);
 
 //输出通过current_layer和display相关变量自行读出
 

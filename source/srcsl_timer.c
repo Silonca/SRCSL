@@ -21,17 +21,19 @@ static volatile uint32_t timer_cnt = 0;
 static uint8_t srcsl_player_list_analyse( SrcslActionPlayer *player);
 
 
-
+//更新全局时间
 void srcsl_timer_updata(void)
 {
     ++timer_cnt;
 }
 
+//计时开始
 void srcsl_timer_set( SrcslTimer *timer)
 {
     timer->time = timer_cnt;
 }
 
+//获取自开始以来的时间
 uint32_t srcsl_timer_get( SrcslTimer *timer)
 {
     return timer_cnt - timer->time;
@@ -41,7 +43,7 @@ uint32_t srcsl_timer_get( SrcslTimer *timer)
 //------------------------------------------------------------
 
 
-
+//动作播放器初始化
 void srcsl_player_init( SrcslActionPlayer *player, const char *list, void ( *act_func)( int32_t action_code))
 {
     player->list = list;
@@ -57,14 +59,14 @@ void srcsl_player_init( SrcslActionPlayer *player, const char *list, void ( *act
 }
 
 
-
+//动作播放解析函数设置，用于自定义解析
 void srcsl_player_set_analyse_func(SrcslActionPlayer *player, uint8_t (*analyse_func)(void *))
 {
 	player->analyse_func = analyse_func;
 }
 
 
-
+//动作播放器开始播放和继续播放
 void srcsl_player_start( SrcslActionPlayer *player)
 {
 	//正常播放状态无动作
@@ -75,13 +77,13 @@ void srcsl_player_start( SrcslActionPlayer *player)
     player->timer_flag = SRCSL_RESET;
 }
 
-
+//动作播放暂停
 void srcsl_player_pause( SrcslActionPlayer *player)
 {
     player->player_state = SRCSL_PLAYER_PAUSE;
 }
 
-
+//动作播放终止
 void srcsl_player_stop( SrcslActionPlayer *player)
 {
     player->player_state = SRCSL_PLAYER_STOP;
@@ -91,7 +93,7 @@ void srcsl_player_stop( SrcslActionPlayer *player)
 	player->list_process = 0;
 }
 
-
+//动作播放重新开始
 void srcsl_player_restart( SrcslActionPlayer *player)
 {
 	srcsl_player_stop(player);
@@ -99,7 +101,7 @@ void srcsl_player_restart( SrcslActionPlayer *player)
 }
 
 
-
+//动作播放器服务函数，需要周期性运行
 uint8_t srcsl_player_server( SrcslActionPlayer *player)
 {
 	//是否暂停
@@ -143,7 +145,7 @@ uint8_t srcsl_player_server( SrcslActionPlayer *player)
 	return player->player_state;
 }
 
-
+//动作播放器播放内容解析
 static uint8_t srcsl_player_list_analyse(SrcslActionPlayer *player)
 {
 	int32_t num_1 = 0, num_2 = 0;
@@ -157,7 +159,6 @@ static uint8_t srcsl_player_list_analyse(SrcslActionPlayer *player)
 		//提前遇到字符串结尾，说明格式错误
 		if (player->list[player->list_process] == '\0')
 		{
-			//srcsl_player_stop(player);
 			return SRCSL_PLAYER_LIST_FORMAT_ERROR;
 		}
 	}
@@ -172,7 +173,6 @@ static uint8_t srcsl_player_list_analyse(SrcslActionPlayer *player)
 		//提前遇到字符串结尾，说明格式错误
 		if (player->list[player->list_process] == '\0')
 		{
-			//srcsl_player_stop(player);
 			return SRCSL_PLAYER_LIST_FORMAT_ERROR;
 		}
 	}
@@ -181,7 +181,6 @@ static uint8_t srcsl_player_list_analyse(SrcslActionPlayer *player)
 	//数值错误
 	if (num_1 == -1 || num_2 == -1)
 	{
-		//srcsl_player_stop(player);
 		return SRCSL_PLAYER_LIST_FORMAT_ERROR;
 	}
 

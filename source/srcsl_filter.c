@@ -5,7 +5,7 @@
 */
 #include "include/srcsl_filter.h"
 
-
+//¿¨¶ûÂüÂË²¨Æ÷
 float srcsl_filter_kalman(SrcslFilterKalman * kal, float input)
 {
 	//Ô¤²âĞ­·½²î·½³Ì£ºkÊ±¿ÌÏµÍ³¹ÀËãĞ­·½²î = k-1Ê±¿ÌµÄÏµÍ³Ğ­·½²î + ¹ı³ÌÔëÉùĞ­·½²î
@@ -18,3 +18,22 @@ float srcsl_filter_kalman(SrcslFilterKalman * kal, float input)
 	return kal->out;
 
 }
+
+//Ò»½×µÍÍ¨ÂË²¨Æ÷
+float srcsl_filter_lowpass(SrcslFilterLowPass * lowpass, float input)
+{
+	lowpass->out = lowpass->a * input + (1.0f - lowpass->a) * lowpass->last;
+	lowpass->last = lowpass->out;
+	return lowpass->out;
+}
+
+
+//¾ùÖµÂË²¨Æ÷
+float srcsl_filter_mean(SrcslFilterMean * mean, float input)
+{
+	mean->sum = mean->sum - mean->values[mean->index] + input;
+	mean->index = (mean->index + 1) % mean->size;
+	mean->out = mean->sum / (float)mean->size;
+	return mean->out;
+}
+

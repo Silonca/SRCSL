@@ -11,18 +11,20 @@ extern "C"{
 ///四轮底盘轮子
 enum SRCSL_CHASSIS_4W 
 { 
-	SRCSL_WHEEL_4W_LF,		//!< 左前轮
-	SRCSL_WHEEL_4W_LR, 		//!< 左后轮
-	SRCSL_WHEEL_4W_RF, 		//!< 右前轮
-	SRCSL_WHEEL_4W_RR		//!< 右后轮
+	SRCSL_WHEEL_4W_LF,		//!< 左前轮(left front)
+	SRCSL_WHEEL_4W_LR, 		//!< 左后轮(left rear)
+	SRCSL_WHEEL_4W_RF, 		//!< 右前轮(right front)
+	SRCSL_WHEEL_4W_RR		//!< 右后轮(right rear)
 };
-///三轮底盘轮子
+
+///三轮底盘轮子（逆时针编号）
 enum SRCSL_CHASSIS_3W 
 { 
 	SRCSL_WHEEL_3W_ONE,		//!< 一号轮
 	SRCSL_WHEEL_3W_TWO,		//!< 二号轮
 	SRCSL_WHEEL_3W_THREE	//!< 三号轮
 };
+
 ///二轮底盘轮子
 enum SRCSL_CHASSIS_2W 
 { 
@@ -119,7 +121,7 @@ void srcsl_chassis_ctrl_calc_2w( SrcslChassis *chassis, float vx, float vyaw);
 void srcsl_chassis_ctrl_calc_3w_omni( SrcslChassis *chassis, uint8_t heading_mode, float vx, float vy, float vyaw);
 
 /**
-* @brief 三全向轮底盘
+* @brief 三全向轮底盘（无头模式）
 * @param *chassis		底盘模块实例的指针
 * @param heading_mode	底盘前进方向模式
 * - SRCSL_WHEEL_3W_HEADING_MOTOR			一号轮子方向为初始正方向

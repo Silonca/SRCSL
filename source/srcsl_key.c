@@ -6,7 +6,7 @@
 #include "include/srcsl_key.h"
 
 
-
+//按键模块初始化
 void srcsl_key_init( SrcslKey *key)
 {
     key->state = SRCSL_KEY_STATE_UNPRESS;
@@ -15,7 +15,7 @@ void srcsl_key_init( SrcslKey *key)
 }
 
 
-
+//按键更新
 void srcsl_key_update( SrcslKey *key, uint8_t newstate)
 {
 	//两次检测到相同数值，说明按键稳定
@@ -46,13 +46,13 @@ void srcsl_key_update( SrcslKey *key, uint8_t newstate)
     }
 }
 
-
+//获取按键状态
 uint8_t srcsl_key_get_state( SrcslKey *key)
 {
     return key->state;
 }
 
-
+//获取按键动作
 uint8_t srcsl_key_get_action( SrcslKey *key)
 {
     return key->action;

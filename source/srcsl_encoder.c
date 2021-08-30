@@ -7,7 +7,7 @@
 #include "include/srcsl_encoder.h"
 
 
-
+//编码器初始化
 void srcsl_encoder_init( SrcslEncoder *encoder, uint32_t encoder_type, uint32_t range)
 {
     encoder->encoder_type = encoder_type;
@@ -20,7 +20,7 @@ void srcsl_encoder_init( SrcslEncoder *encoder, uint32_t encoder_type, uint32_t 
 }
 
 
-
+//设置编码器绝对角度
 void srcsl_encoder_set_angle_abs( SrcslEncoder *encoder, int32_t angle_abs)
 {
     if( encoder->encoder_type == SRCSL_ENCODER_ABSOLUTE)
@@ -28,7 +28,7 @@ void srcsl_encoder_set_angle_abs( SrcslEncoder *encoder, int32_t angle_abs)
 }
 
 
-
+//更新编码器数据
 void srcsl_encoder_updata( SrcslEncoder *encoder, uint32_t angle)
 {
     switch( encoder->encoder_type)
@@ -67,22 +67,25 @@ void srcsl_encoder_updata( SrcslEncoder *encoder, uint32_t angle)
 }
 
 
-
+//获取编码器绝对角度
 uint32_t srcsl_encoder_get_angle_abs( SrcslEncoder *encoder)
 {
     return encoder->angle_abs;
 }
 
+//获取编码器累积角度
 int32_t srcsl_encoder_get_angle_sum( SrcslEncoder *encoder)
 {
     return encoder->angle_sum;
 }
 
+//获取编码器变化量
 int32_t srcsl_encoder_get_d_value( SrcslEncoder *encoder)
 {
     return encoder->d_value;
 }
 
+//克隆编码器（复制参数）
 void srcsl_encoder_clone( SrcslEncoder *des, SrcslEncoder *src)
 {
     srcsl_encoder_init( des, src->encoder_type, src->range);

@@ -7,7 +7,7 @@
 
 #define ABS(X)	( ( (X) > 0) ? ( X) : ( -(X)))			
 
-
+//电机最大步进限制
 int32_t srcsl_motor_ctrl_step(int32_t des, int32_t src, int32_t step)
 {
 	int32_t delta = des - src;
@@ -25,7 +25,7 @@ int32_t srcsl_motor_ctrl_step(int32_t des, int32_t src, int32_t step)
 }
 
 
-
+//电机初始化（绑定编码器和pid）
 void srcsl_motor_init( SrcslMotor *motor, SrcslEncoder *encoder, SrcslPID *speed_pid, SrcslPID *pos_pid)
 {
     motor->range_begin = 0;
@@ -39,12 +39,13 @@ void srcsl_motor_init( SrcslMotor *motor, SrcslEncoder *encoder, SrcslPID *speed
 }
 
 
-
+//电机编码器数据更新
 void srcsl_motor_encoder_updata(SrcslMotor * motor, uint32_t angle)
 {
 	srcsl_encoder_updata(&(motor->encoder), angle);
 }
 
+//设置相对零点（绝对角度控制时由于安装问题电机编码器零点可能不在预期位置，设置相对零点来解决这类问题）
 void srcsl_motor_set_relative_zero(SrcslMotor *motor, int32_t zero)
 {
 	if (motor->encoder.encoder_type == SRCSL_ENCODER_ABSOLUTE)
@@ -52,12 +53,13 @@ void srcsl_motor_set_relative_zero(SrcslMotor *motor, int32_t zero)
 }
 
 
-
+//设定电机旋转函数（用于行程测定函数）
 void srcsl_motor_rotation_func_init( SrcslMotor *motor, void ( *motor_rotation_func)(float srcsl_pid_out))
 {
     motor->motor_rotation_func = motor_rotation_func;
 }
 
+//电机堵转检测
 uint32_t srcsl_motor_stall_test(SrcslMotor *motor)
 {
 	//当输出和积分项输出均大于一定比例，认为发生了堵转
@@ -74,7 +76,7 @@ uint32_t srcsl_motor_stall_test(SrcslMotor *motor)
 }
 
 
-
+//电机速度控制计算函数
 int32_t srcsl_motor_speed_ctrl_calc(SrcslMotor *motor, float speed)
 {
     float get = (float)srcsl_encoder_get_d_value( &(motor->encoder));
@@ -83,7 +85,7 @@ int32_t srcsl_motor_speed_ctrl_calc(SrcslMotor *motor, float speed)
     return motor->out;
 }
 
-
+//电机位置（绝对角度）控制计算函数（会就近归位，不受零点影响）
 int32_t srcsl_motor_position_abs_ctrl_calc(SrcslMotor *motor, float position)
 {
     float speed_get, position_get, delta;
@@ -102,7 +104,7 @@ int32_t srcsl_motor_position_abs_ctrl_calc(SrcslMotor *motor, float position)
     return motor->out;
 }
 
-
+//电机位置（累积角度）控制计算函数
 int32_t srcsl_motor_position_sum_ctrl_calc(SrcslMotor *motor, float position)
 {
 	float speed_get, position_get;
@@ -124,7 +126,7 @@ int32_t srcsl_motor_position_sum_ctrl_calc(SrcslMotor *motor, float position)
 	return motor->out;
 }
 
-
+//电机行程设定
 void srcsl_motor_range_set(SrcslMotor *motor, int32_t range_begin, int32_t range_end)
 {
 	motor->range_begin = range_begin;
@@ -133,7 +135,7 @@ void srcsl_motor_range_set(SrcslMotor *motor, int32_t range_begin, int32_t range
 }
 
 
-
+//电机行程测量
 void srcsl_motor_range_get(SrcslMotor *motor, int32_t step)
 {
     float position_get;
@@ -195,12 +197,13 @@ void srcsl_motor_range_get(SrcslMotor *motor, int32_t step)
 
 //---------------------------------------------
 
+//舵机模块初始化
 void srcsl_motor_servo_init(SrcslServo *servo, void ( *servo_set_func)(uint32_t ))
 {
     servo->servo_set_func = servo_set_func;
 }
 
-
+//舵机转动范围映射（比如将舵机的pwm信号驱动参数映射为易于理解和使用的角度值）
 void srcsl_motor_servo_range_set( SrcslServo * servo, uint32_t origin_range_begin, uint32_t origin_range_end, int32_t range_begin, int32_t range_end)
 {
     servo->origin_range_begin = origin_range_begin;
@@ -210,7 +213,7 @@ void srcsl_motor_servo_range_set( SrcslServo * servo, uint32_t origin_range_begi
 }
 
 
-
+//舵机控制
 void srcsl_motor_servo_set( SrcslServo *servo, int32_t set)
 {
     int32_t temp = (int32_t)((float)set / (float)(servo->range_end - servo->range_begin)

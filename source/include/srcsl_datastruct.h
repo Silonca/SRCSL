@@ -214,9 +214,6 @@ SrcslListNode* srcsl_list_get(SrcslList *list, int32_t index);
 int32_t srcsl_list_get_length(SrcslList *list);
 
 
-
-
-
 #ifdef __cplusplus
 }
 #endif
